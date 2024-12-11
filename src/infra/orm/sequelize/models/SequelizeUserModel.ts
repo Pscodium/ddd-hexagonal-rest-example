@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, UUIDV4 } from 'sequelize';
 import { container } from 'tsyringe';
 import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
 
@@ -13,8 +13,8 @@ export class SequelizeUserModel extends Model {
 SequelizeUserModel.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.UUID,
+            defaultValue: UUIDV4,
             primaryKey: true,
         },
         name: {

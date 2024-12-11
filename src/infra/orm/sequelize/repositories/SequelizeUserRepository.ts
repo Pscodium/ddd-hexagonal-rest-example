@@ -1,6 +1,6 @@
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
-import { SequelizeUserModel } from '../orm/sequelize/models/SequelizeUserModel';
+import { SequelizeUserModel } from '../models/SequelizeUserModel';
 import { injectable } from 'tsyringe';
 
 @injectable()
@@ -10,7 +10,7 @@ export class SequelizeUserRepository implements IUserRepository {
         return new User(createdUser.name, createdUser.email, createdUser.id);
     }
 
-    async findById(id: number): Promise<User | null> {
+    async findById(id: string): Promise<User | null> {
         const user = await SequelizeUserModel.findByPk(id);
         return user ? new User(user.name, user.email, user.id) : null;
     }
@@ -20,11 +20,11 @@ export class SequelizeUserRepository implements IUserRepository {
         return users.map((u) => new User(u.name, u.email, u.id));
     }
 
-    async update(id: number, user: Partial<User>): Promise<void> {
+    async update(id: string, user: Partial<User>): Promise<void> {
         await SequelizeUserModel.update(user, { where: { id } });
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: string): Promise<void> {
         await SequelizeUserModel.destroy({ where: { id } });
     }
 

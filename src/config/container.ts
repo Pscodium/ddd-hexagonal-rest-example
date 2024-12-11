@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 // infra
 import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
-import { SequelizeUserRepository } from '@/infra/repositories/SequelizeUserRepository';
+import { SequelizeUserRepository } from '@/infra/orm/sequelize/repositories/SequelizeUserRepository';
 
 // domain
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
@@ -13,6 +13,7 @@ import { CreateUserUseCase } from '@/app/useCases/user/Create';
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
+import { GetUserById } from '@/app/useCases/user/GetById';
 
 
 // INFRA ------
@@ -32,6 +33,10 @@ container.registerSingleton<IUserRepository>(
 container.registerSingleton<CreateUserUseCase>(
     'CreateUserUseCase',
     CreateUserUseCase
+);
+container.registerSingleton<GetUserById>(
+    'GetUserById',
+    GetUserById
 );
 
 // DOMAIN ------
