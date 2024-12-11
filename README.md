@@ -23,3 +23,4 @@
 ## Possíveis Alterações futuras
 - Adicionar RabbitMQ para a criação de filas de mensagem com protocolo AMQP
 - Adicionar ElasticSearch e S3
+
