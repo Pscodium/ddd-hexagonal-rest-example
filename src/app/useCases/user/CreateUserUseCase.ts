@@ -1,13 +1,13 @@
 import { inject, injectable } from 'tsyringe';
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
-import { CreateUserDTO } from '@/app/dto/user/CreateDTO';
+import { CreateUserDTO } from '@/app/dto/user/CreateUserDTO';
 import { AppError } from '@/shared/errors/AppError';
+import Dependencies from '@/shared/types/dependencies';
 
 @injectable()
 export class CreateUserUseCase {
     constructor(
-        @inject('UserRepository') private userRepository: IUserRepository,
+        @inject('UserRepository') private userRepository: Dependencies['IUserRepository'],
     ) {}
 
     async execute(data: CreateUserDTO): Promise<User> {

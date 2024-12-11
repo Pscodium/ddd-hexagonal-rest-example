@@ -1,12 +1,12 @@
 import { inject, injectable } from 'tsyringe';
-import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
 import { AppError } from '@/shared/errors/AppError';
+import Dependencies from '@/shared/types/dependencies';
 
 @injectable()
 export class FindOneUserUseCase {
     constructor(
-        @inject('UserRepository') private userRepository: IUserRepository,
+        @inject('UserRepository') private userRepository: Dependencies['IUserRepository'],
     ) {}
 
     async execute(id: string): Promise<User> {

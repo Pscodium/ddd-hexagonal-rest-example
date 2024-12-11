@@ -1,14 +1,13 @@
 import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
-import { CreateUserUseCase } from '@/app/useCases/user/Create';
 import { AppError } from '@/shared/errors/AppError';
-import { FindOneUserUseCase } from '@/app/useCases/user/FindOne';
+import Dependencies from '@/shared/types/dependencies';
 
 @injectable()
 export class UserController {
     constructor(
-        @inject('CreateUserUseCase') private createUserUseCase: CreateUserUseCase,
-        @inject('FindOneUserUseCase') private findOneUserUseCase: FindOneUserUseCase
+        @inject('CreateUserUseCase') private createUserUseCase: Dependencies['CreateUserUseCase'],
+        @inject('FindOneUserUseCase') private findOneUserUseCase: Dependencies['FindOneUserUseCase']
     ) {}
 
     async create(req: Request, res: Response): Promise<Response> {
