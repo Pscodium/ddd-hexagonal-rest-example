@@ -1,23 +1,35 @@
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
 import { SequelizeUserModel } from '../models/SequelizeUserModel';
-import { injectable } from 'tsyringe';
+import bcrypt from 'bcrypt';
 
-@injectable()
 export class SequelizeUserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
-        const createdUser = await SequelizeUserModel.create({ name: user.name, email: user.email });
-        return new User(createdUser.name, createdUser.email, createdUser.id);
+
+        user.password = bcrypt.hashSync(user.password, 8);
+
+        const createdUser = await SequelizeUserModel.create({ 
+            firstName: user.firstName, 
+            lastName: user.lastName, 
+            nickname: user.nickname, 
+            email: user.email, 
+            password: user.password 
+        });
+        return new User(createdUser);
     }
 
     async findById(id: string): Promise<User | null> {
-        const user = await SequelizeUserModel.findByPk(id);
-        return user ? new User(user.name, user.email, user.id) : null;
+        const user = await SequelizeUserModel.findByPk(id, {
+            attributes: {
+                exclude: ['password']
+            }
+        });
+        return user ? new User(user) : null;
     }
 
     async findAll(): Promise<User[]> {
         const users = await SequelizeUserModel.findAll();
-        return users.map((u) => new User(u.name, u.email, u.id));
+        return users.map((u) => new User(u));
     }
 
     async update(id: string, user: Partial<User>): Promise<void> {

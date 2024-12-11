@@ -1,13 +1,12 @@
-import { inject, injectable } from 'tsyringe';
 import { User } from '@/domain/entities/User';
 import { AppError } from '@/shared/errors/AppError';
-import Dependencies from '@/shared/types/dependencies';
+import Dependencies from '@/shared/types/Dependencies';
 
-@injectable()
 export class FindOneUserUseCase {
-    constructor(
-        @inject('UserRepository') private userRepository: Dependencies['IUserRepository'],
-    ) {}
+    private userRepository: Dependencies['userRepository'];
+    constructor({ userRepository }: Pick<Dependencies, 'userRepository'>) {
+        this.userRepository = userRepository;
+    }
 
     async execute(id: string): Promise<User> {
         const user = await this.userRepository.findById(id);

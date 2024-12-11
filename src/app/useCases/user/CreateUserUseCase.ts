@@ -1,14 +1,13 @@
-import { inject, injectable } from 'tsyringe';
 import { User } from '@/domain/entities/User';
 import { CreateUserDTO } from '@/app/dto/user/CreateUserDTO';
 import { AppError } from '@/shared/errors/AppError';
-import Dependencies from '@/shared/types/dependencies';
+import Dependencies from '@/shared/types/Dependencies';
 
-@injectable()
 export class CreateUserUseCase {
-    constructor(
-        @inject('UserRepository') private userRepository: Dependencies['IUserRepository'],
-    ) {}
+    private userRepository: Dependencies['userRepository'];
+    constructor({ userRepository }: Pick<Dependencies, 'userRepository'>) {
+        this.userRepository = userRepository;
+    }
 
     async execute(data: CreateUserDTO): Promise<User> {
         const userExists = await this.userRepository.findByEmail(data.email);
@@ -17,7 +16,7 @@ export class CreateUserUseCase {
             throw new AppError('User already exists.', 409);
         }
 
-        const user = new User(data.name, data.email);
+        const user = new User(data);
         return this.userRepository.save(user);
     }
 }
