@@ -14,6 +14,7 @@ export class SequelizeAdapter {
             {
                 host: environment.database.host,
                 dialect: environment.database.dialect,
+                logging: false
             }
         );
         this.loadModels();
