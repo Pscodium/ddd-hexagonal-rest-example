@@ -10,10 +10,11 @@ import { User } from '@/domain/entities/User';
 
 // app
 import { CreateUserUseCase } from '@/app/useCases/user/Create';
+import { FindOneUserUseCase } from '@/app/useCases/user/FindOne';
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
-import { GetUserById } from '@/app/useCases/user/GetById';
+
 
 
 // INFRA ------
@@ -34,9 +35,9 @@ container.registerSingleton<CreateUserUseCase>(
     'CreateUserUseCase',
     CreateUserUseCase
 );
-container.registerSingleton<GetUserById>(
-    'GetUserById',
-    GetUserById
+container.registerSingleton<FindOneUserUseCase>(
+    'FindOneUserUseCase',
+    FindOneUserUseCase
 );
 
 // DOMAIN ------

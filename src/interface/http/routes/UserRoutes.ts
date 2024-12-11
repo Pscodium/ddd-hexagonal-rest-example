@@ -7,6 +7,6 @@ import { UserController } from '@/interface/http/controllers/UserController';
 const userRoutes = Router();
 
 userRoutes.post('/register', injectController(UserController, 'create'));
-userRoutes.get('/user/:id', injectController(UserController, 'getById'));
+userRoutes.get('/user/:id', injectController(UserController, 'findOne'));
 
 export default userRoutes;

@@ -4,7 +4,7 @@ import { User } from '@/domain/entities/User';
 import { AppError } from '@/shared/errors/AppError';
 
 @injectable()
-export class GetUserById {
+export class FindOneUserUseCase {
     constructor(
         @inject('UserRepository') private userRepository: IUserRepository,
     ) {}

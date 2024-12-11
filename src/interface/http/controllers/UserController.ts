@@ -2,13 +2,13 @@ import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import { CreateUserUseCase } from '@/app/useCases/user/Create';
 import { AppError } from '@/shared/errors/AppError';
-import { GetUserById } from '@/app/useCases/user/GetById';
+import { FindOneUserUseCase } from '@/app/useCases/user/FindOne';
 
 @injectable()
 export class UserController {
     constructor(
         @inject('CreateUserUseCase') private createUserUseCase: CreateUserUseCase,
-        @inject('GetUserById') private getUserById: GetUserById
+        @inject('FindOneUserUseCase') private findOneUserUseCase: FindOneUserUseCase
     ) {}
 
     async create(req: Request, res: Response): Promise<Response> {
@@ -32,12 +32,12 @@ export class UserController {
         }  
     }
 
-    async getById(req: Request, res: Response): Promise<Response> {
-        const callName = `${this.constructor.name}.${this.getById.name}()`;
+    async findOne(req: Request, res: Response): Promise<Response> {
+        const callName = `${this.constructor.name}.${this.findOne.name}()`;
         try {
             const { id } = req.params;
 
-            const user = await this.getUserById.execute(id);
+            const user = await this.findOneUserUseCase.execute(id);
 
             return res.status(200).json(user);
         } catch (err: unknown) {

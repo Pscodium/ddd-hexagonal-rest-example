@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { injectable } from 'tsyringe';
-import { environment } from '@/config/env';
+import { environment } from '@/config/Env';
 
 @injectable()
 export class SequelizeAdapter {
