@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import 'reflect-metadata';
 import express from 'express';
-import '@/config/container';
+import '@/config/Container';
 import userRoutes from './routes/UserRoutes';
 
 const app = express();
