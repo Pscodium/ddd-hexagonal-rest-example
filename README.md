@@ -2,7 +2,7 @@
 
 ## Objetivo
 - Criar um projeto modelo, podendo ser utilizado como template para futuros projetos
-- Implementar padrões da arquitetura hexagonal e ddd para fim de conhecimento
+- Implementar padrões da arquitetura hexagonal e ddd para fins de conhecimento
 - Adicionar Injeção de Dependências
 
 ## Requisitos Técnicos
