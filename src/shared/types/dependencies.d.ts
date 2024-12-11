@@ -13,28 +13,35 @@ import { FindOneUserUseCase } from '@/app/useCases/user/FindOneUserUseCase';
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
 
+// Shared
+import { EnvironmentVariables } from './Environment';
+
 export default interface Dependencies {
     /* Infra */
     /* Adapter*/
-    SequelizeAdapter: SequelizeAdapter;
+    sequelizeAdapter: SequelizeAdapter;
     /* Repository */
-    SequelizeUserRepository: SequelizeUserRepository;
+    sequelizeUserRepository: SequelizeUserRepository;
 
     /* Domain */
     /* Entity */
-    User: User;
+    user: User;
     /* Repository */
-    IUserRepository: IUserRepository;
+    userRepository: IUserRepository;
 
     /* App */
     /* Use Cases*/
-    CreateUserUseCase: CreateUserUseCase;
-    FindOneUserUseCase: FindOneUserUseCase
+    createUserUseCase: CreateUserUseCase;
+    findOneUserUseCase: FindOneUserUseCase
 
     /* Interface */
     /* HTTP */
     /* Controller */
-    UserController: UserController;
+    userController: UserController;
+
+    /* Config */
+    /* Environment */
+    environment: EnvironmentVariables
     
 // eslint-disable-next-line semi
 };

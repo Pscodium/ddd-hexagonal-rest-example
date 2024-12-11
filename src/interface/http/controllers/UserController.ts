@@ -1,21 +1,22 @@
 import { Request, Response } from 'express';
-import { inject, injectable } from 'tsyringe';
 import { AppError } from '@/shared/errors/AppError';
-import Dependencies from '@/shared/types/dependencies';
+import Dependencies from '@/shared/types/Dependencies';
 
-@injectable()
 export class UserController {
-    constructor(
-        @inject('CreateUserUseCase') private createUserUseCase: Dependencies['CreateUserUseCase'],
-        @inject('FindOneUserUseCase') private findOneUserUseCase: Dependencies['FindOneUserUseCase']
-    ) {}
+    private createUserUseCase: Dependencies['createUserUseCase'];
+    private findOneUserUseCase: Dependencies['findOneUserUseCase'];
+
+    constructor({ createUserUseCase, findOneUserUseCase }: Pick<Dependencies, 'createUserUseCase' | 'findOneUserUseCase'>) {
+        this.createUserUseCase = createUserUseCase;
+        this.findOneUserUseCase = findOneUserUseCase;
+    }
 
     async create(req: Request, res: Response): Promise<Response> {
         const callName = `${this.constructor.name}.${this.create.name}()`;
         try {
-            const { name, email } = req.body;
+            const { firstName, lastName, nickname, email, password } = req.body;
 
-            const user = await this.createUserUseCase.execute({ name, email });
+            const user = await this.createUserUseCase.execute({ firstName, lastName, nickname, password, email });
 
             return res.status(200).json(user);
         } catch (err: unknown) {
