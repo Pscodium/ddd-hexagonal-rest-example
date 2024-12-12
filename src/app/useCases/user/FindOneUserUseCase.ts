@@ -1,6 +1,6 @@
 import { User } from '@/domain/entities/User';
 import { AppError } from '@/shared/errors/AppError';
-import Dependencies from '@/shared/types/Dependencies';
+import Dependencies from '@/types/Dependencies';
 
 export class FindOneUserUseCase {
     private userRepository: Dependencies['userRepository'];

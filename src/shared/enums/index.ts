@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { EnumsType } from "./types";
+import { EnumsType } from "@/types/Enums";
 
 /* eslint-disable no-prototype-builtins */
 const ENUMS = {

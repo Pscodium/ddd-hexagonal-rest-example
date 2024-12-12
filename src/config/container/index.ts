@@ -7,6 +7,7 @@ import { SequelizeUserRepository } from '@/infra/orm/sequelize/repositories/Sequ
 
 // domain
 import { User } from '@/domain/entities/User';
+import { PasswordValidator } from "@/app/services/user/PasswordValidator";
 
 // app
 import { CreateUserUseCase } from '@/app/useCases/user/CreateUserUseCase';
@@ -16,8 +17,13 @@ import { FindOneUserUseCase } from '@/app/useCases/user/FindOneUserUseCase';
 import { UserController } from '@/interface/http/controllers/UserController';
 
 
-
+// config
 import { environment } from "../Env";
+
+// shared
+import { enums } from "@/shared/enums/index";
+import { regex } from "@/shared/utils/Regex";
+
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -28,6 +34,8 @@ container.register({
     /* Use Cases */
     createUserUseCase: asClass(CreateUserUseCase).singleton(),
     findOneUserUseCase: asClass(FindOneUserUseCase).singleton(),
+    /* Services */
+    passwordValidator: asClass(PasswordValidator).singleton(),
 
     /* DOMAIN */
     /* Entity */
@@ -47,16 +55,24 @@ container.register({
     /* CONFIG */
     environment: asValue(environment),
     app: asClass(App).singleton(),
+
+    /* SHARED */
+    /* Enums */
+    enums: asValue(enums),
+    /* Utils */
+    regex: asValue(regex)
 }).loadModules(
     [
         '../../app/dto/**/*(*.ts)',
         '../../app/useCases/**/*(*.ts)',
+        '../../app/services/**/*(*.ts)',
         '../../config/**/*(*.ts)',
         '../../config/*(*.ts)',
         '../../domain/**/*(*.ts)',
         '../../infra/orm/**/*(*.ts)',
         '../../infra/**/*(*.ts)',
-        '../../interface/http/**/*(*.ts)'
+        '../../interface/http/**/*(*.ts)',
+        '../../shared/**/*(*.ts)'
     ], {
         cwd: __dirname,
         formatName: 'camelCase',

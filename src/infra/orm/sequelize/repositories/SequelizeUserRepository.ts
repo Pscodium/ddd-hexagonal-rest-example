@@ -1,13 +1,9 @@
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
 import { SequelizeUserModel } from '../models/SequelizeUserModel';
-import bcrypt from 'bcrypt';
 
 export class SequelizeUserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
-
-        user.password = bcrypt.hashSync(user.password, 8);
-
         const createdUser = await SequelizeUserModel.create({ 
             firstName: user.firstName, 
             lastName: user.lastName, 
@@ -43,5 +39,19 @@ export class SequelizeUserRepository implements IUserRepository {
     async findByEmail(email: string): Promise<User | null> {
         const user = await SequelizeUserModel.findOne({ where: { email }});
         return user;
+    }
+
+    async nickExists(nickname: string): Promise<boolean> {
+        try {
+            const user = await SequelizeUserModel.findOne({ where: { nickname }});
+
+            if (!user) {
+                return false;
+            }
+
+            return true;
+        } catch (err) {
+            return false;
+        }
     }
 }

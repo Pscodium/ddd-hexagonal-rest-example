@@ -1,6 +1,6 @@
-import { EnumsType } from "@/shared/enums/types";
+import { EnumsType } from "./Enums";
 
-interface UserEntity {
+export interface UserEntity {
     firstName: string;
     lastName: string;
     email: string;
