@@ -1,4 +1,4 @@
-import { EnvironmentVariables } from "@/shared/types/Environment";
+import { EnvironmentVariables } from "@/types/Environment";
 import dotenv from "dotenv";
 dotenv.config();
 

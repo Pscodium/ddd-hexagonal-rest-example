@@ -1,5 +1,5 @@
-import { EnumsType } from "@/shared/enums/types";
-import { UserEntity } from "@/shared/types/domain/entity/UserEntity";
+import { EnumsType } from "@/types/Enums";
+import { UserEntity } from "@/types/UserEntity";
 
 export class User implements UserEntity {
     firstName: string;

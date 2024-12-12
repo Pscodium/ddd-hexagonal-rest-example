@@ -1,11 +1,11 @@
 import { Dialect } from "sequelize";
 
-interface EnvironmentVariables {
+export interface EnvironmentVariables {
     port: number | string;
     database: DatabaseConnectionProps;
 }
 
-interface DatabaseConnectionProps {
+export interface DatabaseConnectionProps {
     host: string;
     db_name: string;
     username: string;

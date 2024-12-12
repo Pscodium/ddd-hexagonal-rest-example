@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { AppError } from '@/shared/errors/AppError';
-import Dependencies from '@/shared/types/Dependencies';
+import Dependencies from '@/types/Dependencies';
 
 export class UserController {
     private createUserUseCase: Dependencies['createUserUseCase'];

@@ -7,4 +7,5 @@ export interface IUserRepository {
     findAll(): Promise<User[]>;
     update(id: string, user: Partial<User>): Promise<void>;
     delete(id: string): Promise<void>;
+    nickExists(nickname: string): Promise<boolean>;
 };

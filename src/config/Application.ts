@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import Dependencies from "@/shared/types/Dependencies";
+import Dependencies from '@/types/Dependencies';
 
 export class App {
     private enrivonment: Dependencies['environment'];

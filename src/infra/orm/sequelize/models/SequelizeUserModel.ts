@@ -2,7 +2,7 @@ import { DataTypes, Model, UUIDV4 } from 'sequelize';
 import { container } from 'tsyringe';
 import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
 import { enums } from '@/shared/enums';
-import { EnumsType } from '@/shared/enums/types';
+import { EnumsType } from '@/types/Enums';
 
 const sequelizeAdapter = container.resolve(SequelizeAdapter);
 

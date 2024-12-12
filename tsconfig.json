@@ -9,11 +9,12 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "baseUrl": "./src",
-    "typeRoots": ["./src/shared/@types/*"],
+    "outDir": "./dist",
+    "typeRoots": ["src/shared/types", "./node_modules/@types"], 
     "paths": {
       "@/*": ["*"]
     },
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "include": ["src", "src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts", "dist"]
 }
