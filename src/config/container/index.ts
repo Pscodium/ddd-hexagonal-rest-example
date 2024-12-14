@@ -4,6 +4,9 @@ import { App } from "../Application";
 // infra
 import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
 import { SequelizeUserRepository } from '@/infra/orm/sequelize/repositories/SequelizeUserRepository';
+import { ElasticSearchClient } from "@/infra/integration/elasticSearch/client";
+import { ElasticSearchLogsRepository } from "@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository";
+import { Logger } from "@/infra/integration/elasticSearch/logger";
 
 // domain
 import { User } from '@/domain/entities/User';
@@ -12,18 +15,19 @@ import { PasswordValidator } from "@/app/services/user/PasswordValidator";
 // app
 import { CreateUserUseCase } from '@/app/useCases/user/CreateUserUseCase';
 import { FindOneUserUseCase } from '@/app/useCases/user/FindOneUserUseCase';
+import { GetLogsUseCase } from "@/app/useCases/log/GetLogsUseCase";
+import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseCase";
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
-
+import { LogsController } from "@/interface/http/controllers/LogsController";
 
 // config
-import { environment } from "../Env";
+import { environment } from "../Environment";
 
 // shared
 import { enums } from "@/shared/enums/index";
 import { regex } from "@/shared/utils/Regex";
-
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -31,35 +35,45 @@ const container = createContainer({
 
 container.register({
     /* APP */
-    /* Use Cases */
+    /* Use Cases - */
+    /* User -- */
     createUserUseCase: asClass(CreateUserUseCase).singleton(),
     findOneUserUseCase: asClass(FindOneUserUseCase).singleton(),
-    /* Services */
+    /* Logs -- */
+    getLogsUseCase: asClass(GetLogsUseCase).singleton(),
+    getLogsFormattedUseCase: asClass(GetLogsFormattedUseCase).singleton(),
+    /* Services - */
     passwordValidator: asClass(PasswordValidator).singleton(),
 
     /* DOMAIN */
-    /* Entity */
+    /* Entity - */
     user: asClass(User).singleton(),
 
     /* INFRA */
-    /* Adapter */
+    /* Adapter - */
     sequelizeAdapter: asClass(SequelizeAdapter).singleton(),
-    /* Repository */
+    /* Repository - */
     userRepository: asClass(SequelizeUserRepository).singleton(),
+    /* Integration - */
+    elasticSearchClient: asClass(ElasticSearchClient).singleton(),
+    logger: asClass(Logger).singleton(),
+    /* Repository -- */
+    logsRepository: asClass(ElasticSearchLogsRepository).singleton(),
 
     /* INTERFACE */
     /* HTTP */
-    /* Controller */
+    /* Controller - */
     userController: asClass(UserController).singleton(),
+    logsController: asClass(LogsController).singleton(),
 
     /* CONFIG */
     environment: asValue(environment),
     app: asClass(App).singleton(),
 
     /* SHARED */
-    /* Enums */
+    /* Enums - */
     enums: asValue(enums),
-    /* Utils */
+    /* Utils - */
     regex: asValue(regex)
 }).loadModules(
     [

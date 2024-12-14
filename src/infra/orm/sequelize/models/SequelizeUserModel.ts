@@ -1,10 +1,8 @@
-import { DataTypes, Model, UUIDV4 } from 'sequelize';
-import { container } from 'tsyringe';
-import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 import { enums } from '@/shared/enums';
 import { EnumsType } from '@/types/Enums';
-
-const sequelizeAdapter = container.resolve(SequelizeAdapter);
 
 export class SequelizeUserModel extends Model {
     public id!: string;
@@ -20,64 +18,67 @@ export class SequelizeUserModel extends Model {
     public password!: string;
 }
 
-SequelizeUserModel.init(
-    {
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: UUIDV4,
-            primaryKey: true,
-        },
-        profileIcon: {
-            type: DataTypes.STRING,
-            defaultValue: 'https://power.staging.onyo.com/assets/img/placeholder-user.png',
-            allowNull: true
-        },
-        nickname: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                is: /^[a-zA-Z0-9_]+$/
+
+export const initSequelizeUserModel = (sequelize: Sequelize) => {
+    SequelizeUserModel.init(
+        {
+            id: {
+                type: DataTypes.UUID,
+                defaultValue: UUIDV4,
+                primaryKey: true,
+            },
+            profileIcon: {
+                type: DataTypes.STRING,
+                defaultValue: 'https://power.staging.onyo.com/assets/img/placeholder-user.png',
+                allowNull: true
+            },
+            nickname: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    is: /^[a-zA-Z0-9_]+$/
+                }
+            },
+            externalId: {
+                type: DataTypes.STRING,
+                field: 'external_id',
+                allowNull: true
+            },
+            role: {
+                type: DataTypes.ENUM(enums.values(enums.UserRoles)),
+                defaultValue: enums.UserRoles.DEFAULT,
+                allowNull: true
+            },
+            status: {
+                type: DataTypes.ENUM(enums.values(enums.UserStatus)),
+                defaultValue: enums.UserStatus.ACTIVE,
+                allowNull: true
+            },
+            firstName: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            lastName: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            email: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            verifiedEmail: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
+            },
+            password: {
+                type: DataTypes.STRING,
+                allowNull: false
             }
         },
-        externalId: {
-            type: DataTypes.STRING,
-            field: 'external_id',
-            allowNull: true
-        },
-        role: {
-            type: DataTypes.ENUM(enums.values(enums.UserRoles)),
-            defaultValue: enums.UserRoles.DEFAULT,
-            allowNull: true
-        },
-        status: {
-            type: DataTypes.ENUM(enums.values(enums.UserStatus)),
-            defaultValue: enums.UserStatus.ACTIVE,
-            allowNull: true
-        },
-        firstName: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        lastName: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        email: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        verifiedEmail: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: false
-        },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: false
+        {
+            sequelize: sequelize,
+            tableName: 'users',
         }
-    },
-    {
-        sequelize: sequelizeAdapter.getConnection(),
-        tableName: 'users',
-    }
-);
+    );
+};
