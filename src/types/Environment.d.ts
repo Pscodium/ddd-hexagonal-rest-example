@@ -3,6 +3,17 @@ import { Dialect } from "sequelize";
 export interface EnvironmentVariables {
     port: number | string;
     database: DatabaseConnectionProps;
+    integration: IntegrationProps;
+}
+
+export interface IntegrationProps {
+    elastic: {
+        node: string;
+        auth: {
+            username: string;
+            password: string;
+        }
+    }
 }
 
 export interface DatabaseConnectionProps {
@@ -12,4 +23,5 @@ export interface DatabaseConnectionProps {
     password: string;
     dialect: Dialect;
     port: string;
+    
 }

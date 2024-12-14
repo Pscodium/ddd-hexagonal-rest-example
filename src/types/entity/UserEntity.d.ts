@@ -1,4 +1,4 @@
-import { EnumsType } from "./Enums";
+import { EnumsType } from "../Enums";
 
 export interface UserEntity {
     firstName: string;

@@ -11,5 +11,14 @@ export const environment: EnvironmentVariables = {
         password: process.env.DB_PASSWORD ?? 'pscodium123',
         port: process.env.DB_PORT ?? '3306',
         dialect: 'mysql'
+    },
+    integration: {
+        elastic: {
+            node: process.env.ELASTIC_HOST ?? '',
+            auth: {
+                password: process.env.ELASTIC_PASSWORD ?? '',
+                username: process.env.ELASTIC_USERNAME ?? ''
+            }
+        }
     }
 };
