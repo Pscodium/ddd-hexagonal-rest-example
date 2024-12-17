@@ -3,10 +3,15 @@ import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
 import { SequelizeUserRepository } from '@/infra/orm/sequelize/repositories/SequelizeUserRepository';
 import { ElasticSearchClient } from '@/infra/integration/elasticSearch/client';
 import { Logger } from '@/infra/integration/elasticSearch/logger';
+import { SequelizeSessionModel } from '@/infra/orm/sequelize/models/SequelizeSessionModel';
+import { ElasticSearchLogsRepository } from '@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository';
+import { SequelizeSessionRepository } from '@/infra/orm/sequelize/repositories/SequelizeSessionRepository';
+import { SequelizeUserModel } from '@/infra/orm/sequelize/models/SequelizeUserModel';
 
 // domain
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { ILogsRepository } from '@/domain/repositories/elastic/ILogsRepository';
+import { ISessionRepository } from '@/domain/repositories/ISessionRepository';
 import { User } from '@/domain/entities/User';
 
 // app
@@ -27,17 +32,27 @@ import { RegexType } from '@/shared/utils/Regex';
 import { EnvironmentVariables } from '@/types/Environment';
 import { EnumsType } from '@/types/Enums';
 
+
+// Default Imports
+import { ModelStatic } from 'sequelize';
+import { LoginUserUseCase } from '@/app/useCases/user/LoginUserUseCase';
+
 export default interface Dependencies {
     /* INFRA - */
         /* Adapter*/
         sequelizeAdapter: SequelizeAdapter;
-        /* Repository */
-        sequelizeUserRepository: SequelizeUserRepository;
+        /* Orm */
+            /* Models */
+            sequelizeSessionModel: ModelStatic<SequelizeSessionModel>;
+            sequelizeUserModel: ModelStatic<SequelizeUserModel>;
+            /* Repository */
+            sequelizeUserRepository: SequelizeUserRepository;
+            sequelizeSessionRepository: SequelizeSessionRepository;
         /* Integration */
         elasticSearchClient: ElasticSearchClient,
         logger: Logger;
             /* Repository */
-            elasticSearchLogsRepository: Elas
+            elasticSearchLogsRepository: ElasticSearchLogsRepository
 
     /* DOMAIN - */
         /* Entity */
@@ -45,12 +60,14 @@ export default interface Dependencies {
         /* Repository */
         userRepository: IUserRepository;
         logsRepository: ILogsRepository;
+        sessionRepository: ISessionRepository;
 
     /* APP - */
         /* Use Cases*/
             /* User */
             createUserUseCase: CreateUserUseCase;
             findOneUserUseCase: FindOneUserUseCase;
+            loginUserUseCase: LoginUserUseCase;
             /* Log */
             getLogsUseCase: GetLogsUseCase;
             getLogsFormattedUseCase: GetLogsFormattedUseCase;

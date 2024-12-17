@@ -20,5 +20,6 @@ export const environment: EnvironmentVariables = {
                 username: process.env.ELASTIC_USERNAME ?? ''
             }
         }
-    }
+    },
+    frontend_origin: process.env.FRONTEND_DOMAIN ?? 'localhost'
 };

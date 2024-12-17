@@ -4,6 +4,7 @@ export interface EnvironmentVariables {
     port: number | string;
     database: DatabaseConnectionProps;
     integration: IntegrationProps;
+    frontend_origin: string;
 }
 
 export interface IntegrationProps {

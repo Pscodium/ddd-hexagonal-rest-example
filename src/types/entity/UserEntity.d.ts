@@ -12,4 +12,5 @@ export interface UserEntity {
     verifiedEmail?: boolean;
     password: string;
     id?: string;
+    token?: string | undefined;
 }
