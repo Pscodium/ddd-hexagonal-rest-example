@@ -5,10 +5,12 @@ import Dependencies from '@/types/Dependencies';
 export class LogsController {
     private getLogsUseCase: Dependencies['getLogsUseCase'];
     private getLogsFormattedUseCase: Dependencies['getLogsFormattedUseCase'];
+    private logger: Dependencies['logger'];
 
-    constructor({ getLogsUseCase, getLogsFormattedUseCase }: Pick<Dependencies, 'getLogsUseCase' | 'getLogsFormattedUseCase'>) {
+    constructor({ getLogsUseCase, getLogsFormattedUseCase, logger }: Pick<Dependencies, 'getLogsUseCase' | 'getLogsFormattedUseCase' | 'logger'>) {
         this.getLogsUseCase = getLogsUseCase;
         this.getLogsFormattedUseCase = getLogsFormattedUseCase;
+        this.logger = logger;
     }
 
     async get(req: Request, res: Response): Promise<Response> {
@@ -23,6 +25,7 @@ export class LogsController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
                 return res.status(err.status).json({ message: err.stack });
             }
 
@@ -42,6 +45,7 @@ export class LogsController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
                 return res.status(err.status).json({ message: err.stack });
             }
 

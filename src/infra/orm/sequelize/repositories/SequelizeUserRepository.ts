@@ -1,6 +1,7 @@
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
 import { SequelizeUserModel } from '../models/SequelizeUserModel';
+import { Op } from 'sequelize';
 
 export class SequelizeUserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
@@ -38,6 +39,11 @@ export class SequelizeUserRepository implements IUserRepository {
 
     async findByEmail(email: string): Promise<User | null> {
         const user = await SequelizeUserModel.findOne({ where: { email }});
+        return user;
+    }
+
+    async findByEmailOrNickname(login: string | undefined | null): Promise<User | null> {
+        const user = await SequelizeUserModel.findOne({ where: {[Op.or]: [{ email: login }, { nickname: login }]}});
         return user;
     }
 

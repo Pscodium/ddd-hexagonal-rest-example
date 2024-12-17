@@ -5,10 +5,10 @@ import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 
 export class SequelizeSessionModel extends Model {
     public sessionId!: string;
-    public jwt!: string;
-    public userId!: string;
+    public jwt!: string | null;
+    public userId!: string | undefined | null;
     public expirationDate!: number;
-    public origin!: string;
+    public origin!: string | undefined;
 
     public static associate(models: any) {
         this.belongsTo(models.SequelizeUserModel, {
@@ -29,9 +29,10 @@ export const initSequelizeSessionModel = (sequelize: Sequelize) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            expiration_date: {
+            expirationDate: {
                 type: DataTypes.DATE,
-                allowNull: false
+                allowNull: false,
+                field: 'expiration_date'
             },
             origin: {
                 type: DataTypes.STRING,

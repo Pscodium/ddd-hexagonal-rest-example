@@ -6,7 +6,10 @@ import { SequelizeAdapter } from '@/infra/adapters/SequelizeAdapter';
 import { SequelizeUserRepository } from '@/infra/orm/sequelize/repositories/SequelizeUserRepository';
 import { ElasticSearchClient } from "@/infra/integration/elasticSearch/client";
 import { ElasticSearchLogsRepository } from "@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository";
+import { SequelizeSessionRepository } from "@/infra/orm/sequelize/repositories/SequelizeSessionRepository";
 import { Logger } from "@/infra/integration/elasticSearch/logger";
+import { SequelizeSessionModel } from "@/infra/orm/sequelize/models/SequelizeSessionModel";
+import { SequelizeUserModel } from "@/infra/orm/sequelize/models/SequelizeUserModel";
 
 // domain
 import { User } from '@/domain/entities/User';
@@ -28,6 +31,7 @@ import { environment } from "../Environment";
 // shared
 import { enums } from "@/shared/enums/index";
 import { regex } from "@/shared/utils/Regex";
+import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -39,6 +43,7 @@ container.register({
     /* User -- */
     createUserUseCase: asClass(CreateUserUseCase).singleton(),
     findOneUserUseCase: asClass(FindOneUserUseCase).singleton(),
+    loginUserUseCase: asClass(LoginUserUseCase).singleton(),
     /* Logs -- */
     getLogsUseCase: asClass(GetLogsUseCase).singleton(),
     getLogsFormattedUseCase: asClass(GetLogsFormattedUseCase).singleton(),
@@ -52,13 +57,19 @@ container.register({
     /* INFRA */
     /* Adapter - */
     sequelizeAdapter: asClass(SequelizeAdapter).singleton(),
-    /* Repository - */
-    userRepository: asClass(SequelizeUserRepository).singleton(),
     /* Integration - */
     elasticSearchClient: asClass(ElasticSearchClient).singleton(),
     logger: asClass(Logger).singleton(),
     /* Repository -- */
     logsRepository: asClass(ElasticSearchLogsRepository).singleton(),
+    /* Orm -*/
+    /* Models -*/
+    sequelizeSessionModel: asClass(SequelizeSessionModel).singleton(),
+    sequelizeUserModel: asClass(SequelizeUserModel).singleton(),
+    
+    /* Repository - */
+    userRepository: asClass(SequelizeUserRepository).singleton(),
+    sessionRepository: asClass(SequelizeSessionRepository).singleton(),
 
     /* INTERFACE */
     /* HTTP */

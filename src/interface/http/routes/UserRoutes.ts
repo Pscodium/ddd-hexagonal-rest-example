@@ -7,5 +7,6 @@ const userRoutes = Router();
 
 userRoutes.post('/register', injectController('userController', 'create'));
 userRoutes.get('/user/:id', injectController('userController', 'findOne'));
+userRoutes.post('/user/login', injectController('userController', 'login'));
 
 export default userRoutes;

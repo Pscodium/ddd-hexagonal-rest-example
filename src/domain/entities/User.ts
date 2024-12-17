@@ -13,6 +13,7 @@ export class User implements UserEntity {
     verifiedEmail?: boolean | undefined;
     password: string;
     id?: string | undefined;
+    token?: string | undefined;
     constructor({ email, externalId, firstName, lastName, nickname, password, profileIcon, role, status, verifiedEmail, id }: UserEntity) {
         this.email = email;
         this.externalId = externalId;
