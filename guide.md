@@ -7,4 +7,13 @@ Vale mencionar que você precisará fazer algumas mudanças de import mas não �
 
 **Exemplo:** 
 
-![alt text](assets/guide/image.png)
+![alt text](assets/guide/types_path.png)
+
+
+## Erro constructor undefined
+Nos casos onde este erro ocorra, você pode tentar verificar se as funções onde utiliza-se a variável 'callName' estão construidas como funções normais de classes (Métodos), caso a resposta seja sim, você deverá mudar para arrow functions pois provavelmente o constructor só está ficando indefinido durante o processo da injeção.
+
+
+**Exemplo do erro:**
+
+![alt text](assets/guide/undefined_constructor_error.png)

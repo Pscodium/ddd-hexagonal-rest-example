@@ -13,8 +13,8 @@ export class LogsController {
         this.logger = logger;
     }
 
-    async get(req: Request, res: Response): Promise<Response> {
-        const callName = `${this.constructor.name}.${this.get.name}()`;
+    public get = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.get()`;
         try {
             const logs = await this.getLogsUseCase.execute();
 
@@ -25,16 +25,16 @@ export class LogsController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
-                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`); // TODO: Centralizar logs apenas na instancia do erro deles
                 return res.status(err.status).json({ message: err.stack });
             }
 
             return res.status(500).json({ stack: `[REQUEST ERROR] - Bad Request` });   
         } 
-    }
+    };
 
-    async getWithFormat(req: Request, res: Response): Promise<Response> {
-        const callName = `${this.constructor.name}.${this.getWithFormat.name}()`;
+    public getWithFormat = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.getWithFormat()`;
         try {
             const logs = await this.getLogsFormattedUseCase.execute();
 
@@ -45,12 +45,12 @@ export class LogsController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
-                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`);  // TODO: Centralizar logs apenas na instancia do erro deles
                 return res.status(err.status).json({ message: err.stack });
             }
 
             return res.status(500).json({ stack: `[REQUEST ERROR] - Bad Request` });   
         } 
-    }
+    };
 
 }

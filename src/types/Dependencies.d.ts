@@ -25,6 +25,7 @@ import { PasswordValidator } from '@/app/services/user/PasswordValidator';
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from '@/interface/http/controllers/LogsController';
 
+
 // Shared
 import { RegexType } from '@/shared/utils/Regex';
 
@@ -79,6 +80,9 @@ export default interface Dependencies {
             /* Controller */
             userController: UserController;
             logsController: LogsController;
+            /* Routes */
+            userRoutes: UserRoutes;
+            logRoutes: LogRoutes;
 
     /* CONFIG - */
         /* Environment */
