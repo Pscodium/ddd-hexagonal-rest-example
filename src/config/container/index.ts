@@ -35,6 +35,8 @@ import { regex } from "@/shared/utils/Regex";
 import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
 import { LogRoutes } from "@/interface/http/routes/LogsRoutes";
+import { AuthorizationRequestService } from "@/interface/http/services/AuthorizationRequestService";
+import { AuthenticationMiddleware } from "@/interface/http/middlewares/Authentication";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -82,6 +84,10 @@ container.register({
     /* Routes - */
     userRoutes: asClass(UserRoutes).singleton(),
     logRoutes: asClass(LogRoutes).singleton(),
+    /* Services - */
+    authorizationRequestService: asClass(AuthorizationRequestService).singleton(),
+    /* Middlewares - */
+    authenticationMiddleware: asClass(AuthenticationMiddleware).singleton(),
 
     /* CONFIG */
     environment: asValue(environment),

@@ -24,6 +24,7 @@ import { PasswordValidator } from '@/app/services/user/PasswordValidator';
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from '@/interface/http/controllers/LogsController';
+import { AuthorizationRequestService } from '@/interface/http/services/AuthorizationRequestService';
 
 
 // Shared
@@ -37,6 +38,8 @@ import { EnumsType } from '@/types/Enums';
 // Default Imports
 import { ModelStatic } from 'sequelize';
 import { LoginUserUseCase } from '@/app/useCases/user/LoginUserUseCase';
+import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentication';
+import { Session } from '@/domain/entities/Session';
 
 export default interface Dependencies {
     /* INFRA - */
@@ -58,6 +61,7 @@ export default interface Dependencies {
     /* DOMAIN - */
         /* Entity */
         user: User;
+        session: Session;
         /* Repository */
         userRepository: IUserRepository;
         logsRepository: ILogsRepository;
@@ -83,6 +87,10 @@ export default interface Dependencies {
             /* Routes */
             userRoutes: UserRoutes;
             logRoutes: LogRoutes;
+            /* Services */
+            authorizationRequestService: AuthorizationRequestService;
+            /* Middlewares */
+            authenticationMiddleware: AuthenticationMiddleware;
 
     /* CONFIG - */
         /* Environment */

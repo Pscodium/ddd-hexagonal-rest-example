@@ -23,7 +23,7 @@ export class LoginUserUseCase {
     async execute(data: LoginUserDTO, res: Response): Promise<User | null> {
         const userExists = await this.userRepository.findByEmailOrNickname(data.email ?? data.nickname);
         
-        if (!userExists) {
+        if (!userExists || !userExists.password) {
             throw new AppError('User not exists.', 404);
         }
         
@@ -40,7 +40,7 @@ export class LoginUserUseCase {
             throw new AppError('Something wrong with login.', 404);
         }
         
-        const sessionExists = await this.sessionRepository.findOne(user?.id, data.origin);
+        const sessionExists = await this.sessionRepository.findOneByUserId(user?.id, data.origin);
 
         if (sessionExists) {
             await this.sessionRepository.destroy(sessionExists.sessionId);

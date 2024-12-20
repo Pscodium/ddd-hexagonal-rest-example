@@ -6,7 +6,7 @@ import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 export class SequelizeSessionModel extends Model {
     public sessionId!: string;
     public jwt!: string | null;
-    public userId!: string | undefined | null;
+    public userId!: string | undefined;
     public expirationDate!: number;
     public origin!: string | undefined;
 

@@ -10,7 +10,7 @@ export interface UserEntity {
     role?: EnumsType['UserRoles'];
     status?: EnumsType['UserStatus'];
     verifiedEmail?: boolean;
-    password: string;
+    password?: string | undefined;
     id?: string;
     token?: string | undefined;
 }
