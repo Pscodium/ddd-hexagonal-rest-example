@@ -5,7 +5,7 @@ export class Session implements SessionEntity {
     jwt: string | null;
     origin: string | undefined;
     sessionId?: string;
-    userId: string | undefined | null;
+    userId: string | undefined;
 
     constructor({ expirationDate, jwt, origin, sessionId, userId }: SessionEntity) {
         this.expirationDate = expirationDate;

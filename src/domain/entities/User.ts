@@ -11,7 +11,7 @@ export class User implements UserEntity {
     role?: EnumsType['UserRoles']  | undefined;
     status?: EnumsType['UserStatus'] | undefined;
     verifiedEmail?: boolean | undefined;
-    password: string;
+    password?: string | undefined;
     id?: string | undefined;
     token?: string | undefined;
     constructor({ email, externalId, firstName, lastName, nickname, password, profileIcon, role, status, verifiedEmail, id }: UserEntity) {

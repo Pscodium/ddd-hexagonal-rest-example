@@ -10,7 +10,7 @@
     "emitDecoratorMetadata": true,
     "baseUrl": "./src",
     "outDir": "./dist",
-    "typeRoots": ["src/shared/types", "./node_modules/@types"], 
+    "typeRoots": ["src/types", "./node_modules/@types"], 
     "paths": {
       "@/*": ["*"]
     },

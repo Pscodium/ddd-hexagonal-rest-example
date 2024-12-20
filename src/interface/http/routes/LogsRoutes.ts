@@ -7,15 +7,17 @@ import Dependencies from '@/types/Dependencies';
 export class LogRoutes {
     private router: any;
     private logsController: Dependencies['logsController'];
+    private authenticationMiddleware: Dependencies['authenticationMiddleware'];
 
-    constructor({ logsController }: Pick<Dependencies, 'logsController'>) {
+    constructor({ logsController, authenticationMiddleware }: Pick<Dependencies, 'logsController' | 'authenticationMiddleware'>) {
         this.logsController = logsController;
+        this.authenticationMiddleware = authenticationMiddleware;
         this.router = Router();
     }
 
     public init(): Router {
-        this.router.get('/logs/get', this.logsController.get);
-        this.router.get('/logs/get/format', this.logsController.getWithFormat);
+        this.router.get('/logs/get', this.authenticationMiddleware.validate, this.logsController.get);
+        this.router.get('/logs/get/format', this.authenticationMiddleware.validate , this.logsController.getWithFormat);
 
         return this.router;
     }

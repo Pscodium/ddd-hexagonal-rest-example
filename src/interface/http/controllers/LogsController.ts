@@ -14,6 +14,7 @@ export class LogsController {
     }
 
     public get = async (req: Request, res: Response): Promise<Response> => {
+        console.log(`aqui `, req.user);
         const callName = `${this.constructor.name}.get()`;
         try {
             const logs = await this.getLogsUseCase.execute();

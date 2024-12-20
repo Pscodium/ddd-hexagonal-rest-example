@@ -16,7 +16,10 @@ export class SequelizeUserRepository implements IUserRepository {
     }
 
     async findById(id: string): Promise<User | null> {
-        const user = await SequelizeUserModel.findByPk(id, {
+        const user = await SequelizeUserModel.findOne({
+            where: {
+                id
+            },
             attributes: {
                 exclude: ['password']
             }

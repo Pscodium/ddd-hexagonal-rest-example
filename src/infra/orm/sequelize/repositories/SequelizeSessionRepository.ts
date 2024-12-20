@@ -4,18 +4,18 @@ import { SequelizeSessionModel } from "../models/SequelizeSessionModel";
 import { AppError } from "@/shared/errors/AppError";
 
 export class SequelizeSessionRepository implements ISessionRepository {
-    async findOne(userId: string | undefined, origin: string): Promise<Session | null> {
+    async findOne(token: string): Promise<Session | null> {
         try {
             const session = await SequelizeSessionModel.findOne({
                 where: {
-                    userId,
-                    origin
+                    expiration_date: SequelizeSessionModel.sequelize?.literal('expiration_date > NOW()'),
+                    sessionId: token
                 }
             });
     
             return session ? new Session(session) : null;
         } catch (err) {
-            throw new AppError(`Origin or UserId undefined - stack: ${err}`, 500);
+            throw new AppError(`Unexpected error on get session by token - stack: ${err}`, 500);
         }
     }
 
@@ -35,6 +35,21 @@ export class SequelizeSessionRepository implements ISessionRepository {
             return new Session(createdSession);
         } catch (err) {
             throw new AppError(`Unexpected error on create a session - stack: ${err} `, 500);
+        }
+    }
+
+    async findOneByUserId(userId: string | undefined, origin: string | undefined): Promise<Session | null> {
+        try {
+            const session = await SequelizeSessionModel.findOne({
+                where: {
+                    userId,
+                    origin
+                }
+            });
+    
+            return session ? new Session(session) : null;
+        } catch (err) {
+            throw new AppError(`Origin or UserId undefined - stack: ${err}`, 500);
         }
     }
 }
