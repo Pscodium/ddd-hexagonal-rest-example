@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
 import { AppError } from '@/shared/errors/AppError';
 import Dependencies from '@/types/Dependencies';
+import { Request, Response } from 'express';
 
 export class UserController {
     private createUserUseCase: Dependencies['createUserUseCase'];
@@ -15,8 +15,8 @@ export class UserController {
         this.logger = logger;
     }
 
-    async create(req: Request, res: Response): Promise<Response> {
-        const callName = `${this.constructor.name}.${this.create.name}()`;
+    public create = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.create()`;
         try {
             const { firstName, lastName, nickname, email, password } = req.body;
 
@@ -29,16 +29,16 @@ export class UserController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
-                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`); // TODO: Centralizar logs apenas na instancia do erro deles
                 return res.status(err.status).json({ message: err.stack });
             }
 
             return res.status(500).json({ stack: `[REQUEST ERROR] - Bad Request` });   
         }
-    }
+    };
 
-    async findOne(req: Request, res: Response): Promise<Response> {
-        const callName = `${this.constructor.name}.${this.findOne.name}()`;
+    public findOne = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.findOne()`;
         try {
             const { id } = req.params;
 
@@ -51,16 +51,16 @@ export class UserController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
-                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`); // TODO: Centralizar logs apenas na instancia do erro deles
                 return res.status(err.status).json({ message: err.stack });
             }
 
             return res.status(500).json({ stack: `[REQUEST ERROR] - Bad Request` });   
         }  
-    }
+    };
 
-    async login(req: Request, res: Response): Promise<Response> {
-        const callName = `${this.constructor.name}.${this.login.name}()`;
+    public login = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.login()`;
         try {
             const { origin } = req.headers;
             const { nickname, email, password } = req.body;
@@ -74,11 +74,11 @@ export class UserController {
                     message: `[REQUEST ERROR] - ${callName}`, 
                     stack: err.stack 
                 }));
-                this.logger.error(`[REQUEST ERROR] - ${err.message}`);
+                this.logger.error(`[REQUEST ERROR] - ${err.message}`); // TODO: Centralizar logs apenas na instancia do erro deles
                 return res.status(err.status).json({ message: err.stack });
             }
 
             return res.status(500).json({ stack: `[REQUEST ERROR] - Bad Request` });   
         }
-    }
+    };
 }

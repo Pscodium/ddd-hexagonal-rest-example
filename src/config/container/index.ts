@@ -25,6 +25,7 @@ import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseC
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from "@/interface/http/controllers/LogsController";
 
+
 // config
 import { environment } from "../Environment";
 
@@ -32,6 +33,8 @@ import { environment } from "../Environment";
 import { enums } from "@/shared/enums/index";
 import { regex } from "@/shared/utils/Regex";
 import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
+import { UserRoutes } from "@/interface/http/routes/UserRoutes";
+import { LogRoutes } from "@/interface/http/routes/LogsRoutes";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -76,6 +79,9 @@ container.register({
     /* Controller - */
     userController: asClass(UserController).singleton(),
     logsController: asClass(LogsController).singleton(),
+    /* Routes - */
+    userRoutes: asClass(UserRoutes).singleton(),
+    logRoutes: asClass(LogRoutes).singleton(),
 
     /* CONFIG */
     environment: asValue(environment),
