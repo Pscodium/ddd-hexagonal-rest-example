@@ -7,12 +7,16 @@ import { SequelizeUserRepository } from '@/infra/orm/sequelize/repositories/Sequ
 import { ElasticSearchClient } from "@/infra/integration/elasticSearch/client";
 import { ElasticSearchLogsRepository } from "@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository";
 import { SequelizeSessionRepository } from "@/infra/orm/sequelize/repositories/SequelizeSessionRepository";
+import { SequelizePermissionRepository } from "@/infra/orm/sequelize/repositories/SequelizePermissionRepository";
 import { Logger } from "@/infra/integration/elasticSearch/logger";
 import { SequelizeSessionModel } from "@/infra/orm/sequelize/models/SequelizeSessionModel";
 import { SequelizeUserModel } from "@/infra/orm/sequelize/models/SequelizeUserModel";
+import { SequelizePermissionModel } from "@/infra/orm/sequelize/models/SequelizePermissionModel";
 
 // domain
 import { User } from '@/domain/entities/User';
+import { Session } from "@/domain/entities/Session";
+import { Permission } from "@/domain/entities/Permission";
 import { PasswordValidator } from "@/app/services/user/PasswordValidator";
 
 // app
@@ -24,7 +28,9 @@ import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseC
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from "@/interface/http/controllers/LogsController";
-
+import { PermissionRequestService } from "@/interface/http/services/PermissionRequestService";
+import { AuthorizationRequestService } from "@/interface/http/services/AuthorizationRequestService";
+import { AuthenticationMiddleware } from "@/interface/http/middlewares/Authentication";
 
 // config
 import { environment } from "../Environment";
@@ -35,8 +41,6 @@ import { regex } from "@/shared/utils/Regex";
 import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
 import { LogRoutes } from "@/interface/http/routes/LogsRoutes";
-import { AuthorizationRequestService } from "@/interface/http/services/AuthorizationRequestService";
-import { AuthenticationMiddleware } from "@/interface/http/middlewares/Authentication";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -58,6 +62,8 @@ container.register({
     /* DOMAIN */
     /* Entity - */
     user: asClass(User).singleton(),
+    session: asClass(Session).singleton(),
+    permission: asClass(Permission).singleton(),
 
     /* INFRA */
     /* Adapter - */
@@ -71,10 +77,12 @@ container.register({
     /* Models -*/
     sequelizeSessionModel: asClass(SequelizeSessionModel).singleton(),
     sequelizeUserModel: asClass(SequelizeUserModel).singleton(),
+    sequelizePermissionModel: asClass(SequelizePermissionModel).singleton(),
     
     /* Repository - */
     userRepository: asClass(SequelizeUserRepository).singleton(),
     sessionRepository: asClass(SequelizeSessionRepository).singleton(),
+    permissionRepository: asClass(SequelizePermissionRepository).singleton(),
 
     /* INTERFACE */
     /* HTTP */
@@ -86,6 +94,7 @@ container.register({
     logRoutes: asClass(LogRoutes).singleton(),
     /* Services - */
     authorizationRequestService: asClass(AuthorizationRequestService).singleton(),
+    permissionRequestService: asClass(PermissionRequestService).singleton(),
     /* Middlewares - */
     authenticationMiddleware: asClass(AuthenticationMiddleware).singleton(),
 

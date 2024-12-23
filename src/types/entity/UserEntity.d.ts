@@ -1,4 +1,5 @@
 import { EnumsType } from "../Enums";
+import { PermissionEntity } from "./PermissionEntity";
 
 export interface UserEntity {
     firstName: string;
@@ -13,4 +14,5 @@ export interface UserEntity {
     password?: string | undefined;
     id?: string;
     token?: string | undefined;
+    Permission?: PermissionEntity;
 }

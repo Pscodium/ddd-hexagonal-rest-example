@@ -11,7 +11,7 @@ export class SequelizeSessionModel extends Model {
     public origin!: string | undefined;
 
     public static associate(models: any) {
-        this.belongsTo(models.SequelizeUserModel, {
+        this.belongsTo(models.User, {
             foreignKey: 'userId'
         });
     }

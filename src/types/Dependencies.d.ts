@@ -7,11 +7,17 @@ import { SequelizeSessionModel } from '@/infra/orm/sequelize/models/SequelizeSes
 import { ElasticSearchLogsRepository } from '@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository';
 import { SequelizeSessionRepository } from '@/infra/orm/sequelize/repositories/SequelizeSessionRepository';
 import { SequelizeUserModel } from '@/infra/orm/sequelize/models/SequelizeUserModel';
+import { PermissionRequestService } from '@/interface/http/services/PermissionRequestService';
+import { SequelizePermissionRepository } from '@/infra/orm/sequelize/repositories/SequelizePermissionRepository';
+import { SequelizePermissionModel } from '@/infra/orm/sequelize/models/SequelizePermissionModel';
 
 // domain
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { ILogsRepository } from '@/domain/repositories/elastic/ILogsRepository';
 import { ISessionRepository } from '@/domain/repositories/ISessionRepository';
+import { IPermissionRepository } from '@/domain/repositories/IPermissionRepository';
+import { Permission } from '@/domain/entities/Permission';
+import { Session } from '@/domain/entities/Session';
 import { User } from '@/domain/entities/User';
 
 // app
@@ -20,11 +26,13 @@ import { GetLogsFormattedUseCase } from '@/app/useCases/log/GetLogsFormattedUseC
 import { CreateUserUseCase } from '@/app/useCases/user/CreateUserUseCase';
 import { FindOneUserUseCase } from '@/app/useCases/user/FindOneUserUseCase';
 import { PasswordValidator } from '@/app/services/user/PasswordValidator';
+import { LoginUserUseCase } from '@/app/useCases/user/LoginUserUseCase';
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from '@/interface/http/controllers/LogsController';
 import { AuthorizationRequestService } from '@/interface/http/services/AuthorizationRequestService';
+import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentication';
 
 
 // Shared
@@ -37,9 +45,6 @@ import { EnumsType } from '@/types/Enums';
 
 // Default Imports
 import { ModelStatic } from 'sequelize';
-import { LoginUserUseCase } from '@/app/useCases/user/LoginUserUseCase';
-import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentication';
-import { Session } from '@/domain/entities/Session';
 
 export default interface Dependencies {
     /* INFRA - */
@@ -49,21 +54,25 @@ export default interface Dependencies {
             /* Models */
             sequelizeSessionModel: ModelStatic<SequelizeSessionModel>;
             sequelizeUserModel: ModelStatic<SequelizeUserModel>;
+            sequelizePermissionModel: ModelStatic<SequelizePermissionModel>;
             /* Repository */
             sequelizeUserRepository: SequelizeUserRepository;
             sequelizeSessionRepository: SequelizeSessionRepository;
+            sequelizePermissionRepository: SequelizePermissionRepository;
         /* Integration */
-        elasticSearchClient: ElasticSearchClient,
+        elasticSearchClient: ElasticSearchClient;
         logger: Logger;
             /* Repository */
-            elasticSearchLogsRepository: ElasticSearchLogsRepository
+            elasticSearchLogsRepository: ElasticSearchLogsRepository;
 
     /* DOMAIN - */
         /* Entity */
         user: User;
         session: Session;
+        permission: Permission;
         /* Repository */
         userRepository: IUserRepository;
+        permissionRepository: IPermissionRepository;
         logsRepository: ILogsRepository;
         sessionRepository: ISessionRepository;
 
@@ -89,6 +98,7 @@ export default interface Dependencies {
             logRoutes: LogRoutes;
             /* Services */
             authorizationRequestService: AuthorizationRequestService;
+            permissionRequestService: PermissionRequestService;
             /* Middlewares */
             authenticationMiddleware: AuthenticationMiddleware;
 

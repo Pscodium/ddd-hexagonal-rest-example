@@ -8,15 +8,18 @@ import Dependencies from '@/types/Dependencies';
 export class UserRoutes {
     private router: any;
     private userController: Dependencies['userController'];
+    private authenticationMiddleware: Dependencies['authenticationMiddleware'];
 
-    constructor({ userController }: Pick<Dependencies, 'userController'>) {
+    constructor({ userController, authenticationMiddleware }: Pick<Dependencies, 'userController' | 'authenticationMiddleware'>) {
         this.userController = userController;
+        this.authenticationMiddleware = authenticationMiddleware;
         this.router = Router();
     }
     public init(): Router {
         this.router.post('/register', this.userController.create);
-        this.router.get('/user/:id', this.userController.findOne);
         this.router.post('/user/login', this.userController.login);
+        this.router.get('/user/:id', this.authenticationMiddleware.validate, this.userController.findOne);
+        this.router.get('/check/auth', this.authenticationMiddleware.validate, this.userController.check);
 
         return this.router;
     }

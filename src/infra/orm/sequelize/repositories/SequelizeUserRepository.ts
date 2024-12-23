@@ -2,16 +2,22 @@ import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { User } from '@/domain/entities/User';
 import { SequelizeUserModel } from '../models/SequelizeUserModel';
 import { Op } from 'sequelize';
+import { SequelizePermissionModel } from '../models/SequelizePermissionModel';
 
 export class SequelizeUserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
+        const permissions = await SequelizePermissionModel.create();
         const createdUser = await SequelizeUserModel.create({ 
             firstName: user.firstName, 
             lastName: user.lastName, 
             nickname: user.nickname, 
             email: user.email, 
-            password: user.password 
+            password: user.password,
+            permissionId: permissions.id
         });
+        permissions.userId = createdUser.id;
+        await permissions.save();
+        
         return new User(createdUser);
     }
 
@@ -21,10 +27,18 @@ export class SequelizeUserRepository implements IUserRepository {
                 id
             },
             attributes: {
-                exclude: ['password']
+                exclude: ['password'],
+            },
+            include: {
+                model: SequelizePermissionModel,
+                as: 'Permission',
+                attributes: {
+                    exclude: ['createdAt', 'updatedAt', 'id', 'userId']
+                }
             }
         });
-        return user ? new User(user) : null;
+
+        return user ? new User(user.toJSON()) : null;
     }
 
     async findAll(): Promise<User[]> {
