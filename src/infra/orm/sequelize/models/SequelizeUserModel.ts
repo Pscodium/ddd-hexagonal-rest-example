@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 import { enums } from '@/shared/enums';
 import { EnumsType } from '@/types/Enums';
+import { PermissionEntity } from '@/types/entity/PermissionEntity';
 
 export class SequelizeUserModel extends Model {
     public id!: string;
@@ -16,6 +18,14 @@ export class SequelizeUserModel extends Model {
     public email!: string;
     public verifiedEmail!: boolean;
     public password!: string;
+    public Permission!: PermissionEntity;
+
+    public static associate(models: any) {
+        this.hasOne(models.Permission, {
+            foreignKey: 'userId',
+            as: 'Permission'
+        });
+    }
 }
 
 

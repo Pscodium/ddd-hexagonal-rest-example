@@ -40,8 +40,10 @@ export class SequelizeAdapter {
                 const initModel = modelModule[`init${path.basename(file, path.extname(file))}`];
                 if (initModel) {
                     initModel(this.sequelize);
-                    const modelName = path.basename(file, path.extname(file));
-                    this.models[modelName] = modelModule[modelName];
+                    const modelFileName = path.basename(file, path.extname(file));
+                    const modelName = modelFileName.replace(/Sequelize|Model/gm, '');
+
+                    this.models[modelName] = modelModule[modelFileName];
                 }
             }
         }

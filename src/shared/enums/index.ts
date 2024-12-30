@@ -36,7 +36,7 @@ const ENUMS = {
         "CAN_EDIT_PROFILE": 'can_edit_profile',
         "CAN_EDIT_PHOTO": 'can_edit_photo',
         "CAN_REMOVE_ACCOUNT": 'can_remove_account'
-    },
+    } as const,
     Threads: {
         Reactions: {
             "POST_LIKE": "post_like",
