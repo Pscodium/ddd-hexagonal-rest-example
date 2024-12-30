@@ -63,7 +63,7 @@ export class AuthenticationMiddleware {
         const callName = `${this.constructor.name}.${this.hasPermissions.name}()`;
         return async(req: Request, res: Response, next: NextFunction) => {
             if (!req.userId) {
-                throw new AppError('User is not autorizado', 403);
+                throw new AppError('User is not autorized', 403);
             } else if (req.master_admin_level) {
                 return next();
             }
