@@ -41,6 +41,7 @@ import { regex } from "@/shared/utils/Regex";
 import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
 import { LogRoutes } from "@/interface/http/routes/LogsRoutes";
+import { UnexpiredLoginUseCase } from "@/app/useCases/user/UnexpiredLoginUseCase";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -53,6 +54,7 @@ container.register({
     createUserUseCase: asClass(CreateUserUseCase).singleton(),
     findOneUserUseCase: asClass(FindOneUserUseCase).singleton(),
     loginUserUseCase: asClass(LoginUserUseCase).singleton(),
+    unexpiredLoginUseCase: asClass(UnexpiredLoginUseCase).singleton(),
     /* Logs -- */
     getLogsUseCase: asClass(GetLogsUseCase).singleton(),
     getLogsFormattedUseCase: asClass(GetLogsFormattedUseCase).singleton(),

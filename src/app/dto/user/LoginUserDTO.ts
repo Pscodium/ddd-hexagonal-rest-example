@@ -1,6 +1,5 @@
 export interface LoginUserDTO {
-    email: string;
-    nickname: string;
+    login: string;
     password: string;
     origin: string | undefined;
 }

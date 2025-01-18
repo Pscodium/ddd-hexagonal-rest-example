@@ -1,7 +1,7 @@
 import { EnumsType } from "../Enums";
 import { PermissionEntity } from "./PermissionEntity";
 
-export interface UserEntity {
+export interface IUserEntity {
     firstName: string;
     lastName: string;
     email: string;

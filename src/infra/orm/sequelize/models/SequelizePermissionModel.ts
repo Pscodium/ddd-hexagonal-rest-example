@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { ENUMS } from '@/shared/enums';
-import { PermissionEntity } from '@/types/entity/PermissionEntity';
+import { IPermissionEntity } from '@/types/entity/PermissionEntity';
 import { DataTypes, Model, ModelAttributes, Optional, Sequelize, UUIDV4 } from 'sequelize';
 
-export class SequelizePermissionModel extends Model<PermissionEntity> {
+export class SequelizePermissionModel extends Model<IPermissionEntity> {
     public id!: string;
     public userId!: string;
 
@@ -32,7 +32,7 @@ export const initSequelizePermissionModel = (sequelize: Sequelize) => {
         };
     });
 
-    SequelizePermissionModel.init(permission_model as ModelAttributes<SequelizePermissionModel, Optional<PermissionEntity, never>>, {
+    SequelizePermissionModel.init(permission_model as ModelAttributes<SequelizePermissionModel, Optional<IPermissionEntity, never>>, {
         sequelize: sequelize,
         tableName: 'permission',
     });

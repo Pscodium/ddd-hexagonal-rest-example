@@ -17,9 +17,12 @@ export class UserRoutes {
     }
     public init(): Router {
         this.router.post('/register', this.userController.create);
-        this.router.post('/user/login', this.userController.login);
-        this.router.get('/user/:id', this.authenticationMiddleware.validate, this.userController.findOne);
+        this.router.post('/login', this.userController.login);
+        this.router.post('/electron/login', this.userController.unexpiredLogin);
+        this.router.get('/electron/logout', this.authenticationMiddleware.validate, this.userController.unexpiredLogout);
         this.router.get('/check/auth', this.authenticationMiddleware.validate, this.userController.check);
+        this.router.get('/logout', this.authenticationMiddleware.validate, this.userController.logout);
+        this.router.get('/user/:id', this.authenticationMiddleware.validate, this.userController.findOne);
 
         return this.router;
     }

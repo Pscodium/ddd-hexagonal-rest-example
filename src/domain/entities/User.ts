@@ -1,8 +1,8 @@
 import { EnumsType } from "@/types/Enums";
-import { PermissionEntity } from "@/types/entity/PermissionEntity";
-import { UserEntity } from "@/types/entity/UserEntity";
+import { IPermissionEntity } from "@/types/entity/PermissionEntity";
+import { IUserEntity } from "@/types/entity/UserEntity";
 
-export class User implements UserEntity {
+export class User implements IUserEntity {
     firstName: string;
     lastName: string;
     email: string;
@@ -15,8 +15,8 @@ export class User implements UserEntity {
     password?: string | undefined;
     id?: string | undefined;
     token?: string | undefined;
-    Permission?: PermissionEntity;
-    constructor({ email, externalId, firstName, lastName, nickname, password, profileIcon, role, status, verifiedEmail, id, Permission }: UserEntity) {
+    Permission?: IPermissionEntity;
+    constructor({ email, externalId, firstName, lastName, nickname, password, profileIcon, role, status, verifiedEmail, id, Permission }: IUserEntity) {
         this.email = email;
         this.externalId = externalId;
         this.firstName = firstName;

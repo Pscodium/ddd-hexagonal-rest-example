@@ -6,7 +6,7 @@ import { Response } from 'express';
 import moment from 'moment';
 import { serialize } from 'cookie';
 
-export class LoginUserUseCase {
+export class UnexpiredLoginUseCase {
     private userRepository: Dependencies['userRepository'];
     private passwordValidator: Dependencies['passwordValidator'];
     private sessionRepository: Dependencies['sessionRepository'];
@@ -20,7 +20,11 @@ export class LoginUserUseCase {
         this.logger = logger;
     }
 
-    async execute(data: LoginUserDTO, res: Response): Promise<User | null> {
+    async execute(data: Partial<LoginUserDTO>, res: Response): Promise<User | null> {
+        if (!data.login || !data.password) {
+            throw new AppError('You need to send a correct body for this request', 422);
+        }
+
         const userExists = await this.userRepository.findByEmailOrNickname(data.login);
         
         if (!userExists || !userExists.password) {
@@ -40,17 +44,17 @@ export class LoginUserUseCase {
             throw new AppError('Something wrong with login.', 404);
         }
         
-        const sessionExists = await this.sessionRepository.findOneByUserId(user?.id, data.origin);
+        const sessionExists = await this.sessionRepository.findOneByUserId(user?.id, this.environment.electron_origin);
 
         if (sessionExists) {
             await this.sessionRepository.destroy(sessionExists.sessionId);
         }
 
         const newSession = await this.sessionRepository.create({
-            expirationDate: moment().subtract(3, 'hour').add(3, 'day').valueOf(),
+            expirationDate: moment().add(999, 'years').valueOf(),
             jwt: null,
             userId: user?.id,
-            origin: data.origin
+            origin: this.environment.electron_origin
         });
     
         const serialized = serialize('token', String(newSession.sessionId), {

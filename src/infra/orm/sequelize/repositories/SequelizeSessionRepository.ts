@@ -52,4 +52,12 @@ export class SequelizeSessionRepository implements ISessionRepository {
             throw new AppError(`Origin or UserId undefined - stack: ${err}`, 500);
         }
     }
+
+    async destroyByUserIdAndOrigin(userId: string, origin: string): Promise<number> {
+        return await SequelizeSessionModel.destroy({ where: { userId: userId, origin: origin }, limit: 1 });
+    }
+
+    async destroyByToken(token: string): Promise<number> {
+        return await SequelizeSessionModel.destroy({ where: { sessionId: token }, limit: 1 });
+    }
 }
