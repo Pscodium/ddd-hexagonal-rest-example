@@ -16,10 +16,12 @@ export const environment: EnvironmentVariables = {
         elastic: {
             node: process.env.ELASTIC_HOST ?? '',
             auth: {
-                password: process.env.ELASTIC_PASSWORD ?? '',
+                password: process.env.ELASTIC_PASSWORD ?? '', 
                 username: process.env.ELASTIC_USERNAME ?? ''
             }
         }
     },
-    frontend_origin: process.env.FRONTEND_DOMAIN ?? 'localhost'
+    frontend_domain: process.env.FRONTEND_DOMAIN ?? 'localhost',
+    frontend_origin: process.env.FRONTEND_ORIGIN ?? 'http://localhost:2304',
+    electron_origin: process.env.ELECTRON_ORIGIN ?? 'http://localhost:5173'
 };

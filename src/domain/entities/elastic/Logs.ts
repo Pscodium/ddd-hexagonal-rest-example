@@ -1,7 +1,7 @@
-import { LogEntity } from "@/types/entity/LogsEntity";
+import { ILogEntity } from "@/types/entity/LogsEntity";
 import { SortResults } from "@elastic/elasticsearch/lib/api/types";
 
-export class Logs implements LogEntity {
+export class Logs implements ILogEntity {
     _id: string | undefined;
     _index: string;
     _score: number | null | undefined;
@@ -9,7 +9,7 @@ export class Logs implements LogEntity {
     level: string;
     timestamp: string;
     sort: SortResults | undefined;
-    constructor({ _id, _index, _score, message, level, timestamp, sort }: LogEntity) {
+    constructor({ _id, _index, _score, message, level, timestamp, sort }: ILogEntity) {
         this._id = _id;
         this._index = _index;
         this._score = _score;

@@ -2,32 +2,50 @@ import { AppError } from '@/shared/errors/AppError';
 import Dependencies from '@/types/Dependencies';
 import { Request, Response } from 'express';
 
-export class UserController {
+interface IUserController {
+    create(req: Request, res: Response): Promise<Response>;
+    findOne(req: Request, res: Response): Promise<Response>;
+    login(req: Request, res: Response): Promise<Response>;
+    check(req: Request, res: Response): Promise<Response>;
+    unexpiredLogin(req: Request, res: Response): Promise<Response>;
+    unexpiredLogout(req: Request, res: Response): Promise<Response>;
+    logout(req: Request, res: Response): Promise<Response>;
+}
+
+export class UserController implements IUserController {
     private createUserUseCase: Dependencies['createUserUseCase'];
     private findOneUserUseCase: Dependencies['findOneUserUseCase'];
     private loginUserUseCase: Dependencies['loginUserUseCase'];
+    private unexpiredLoginUseCase: Dependencies['unexpiredLoginUseCase'];
     private authorizationRequestService: Dependencies['authorizationRequestService'];
+    private environment: Dependencies['environment'];
     private logger: Dependencies['logger'];
 
     constructor({
         createUserUseCase,
         findOneUserUseCase,
         loginUserUseCase,
+        unexpiredLoginUseCase,
         authorizationRequestService,
+        environment,
         logger,
     }: Pick<
         Dependencies,
         | 'createUserUseCase'
         | 'findOneUserUseCase'
         | 'loginUserUseCase'
+        | 'unexpiredLoginUseCase'
         | 'authorizationRequestService'
+        | 'environment'
         | 'logger'
     >) {
         this.createUserUseCase = createUserUseCase;
         this.findOneUserUseCase = findOneUserUseCase;
         this.loginUserUseCase = loginUserUseCase;
+        this.unexpiredLoginUseCase = unexpiredLoginUseCase;
 
         this.authorizationRequestService = authorizationRequestService;
+        this.environment = environment;
         this.logger = logger;
     }
 
@@ -93,10 +111,10 @@ export class UserController {
         const callName = `${this.constructor.name}.login()`;
         try {
             const { origin } = req.headers;
-            const { nickname, email, password } = req.body;
-
+            const { login, password } = req.body;
+            
             const user = await this.loginUserUseCase.execute(
-                { nickname, email, password, origin },
+                { login, password, origin },
                 res,
             );
 
@@ -125,6 +143,100 @@ export class UserController {
             const user = await this.authorizationRequestService.checkAuth(req, res);
 
             return res.status(200).json(user);
+        } catch (err) {
+            res.clearCookie('token', {
+                domain: this.environment.frontend_domain,
+                sameSite: 'none',
+                secure: true,
+                path: '/',
+            });
+
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public unexpiredLogin = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.unexpiredLogin()`;
+        try {
+            const { login, password } = req.body;
+
+            const user = await this.unexpiredLoginUseCase.execute(
+                { login, password },
+                res,
+            );
+
+            return res.status(200).json(user);
+        } catch (err) {
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public unexpiredLogout = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.unexpiredLogout()`;
+        try {
+            const sessionDeleted = await this.authorizationRequestService.logout(req, res);
+
+            return sessionDeleted ?
+                res.status(200).json({ success: true }) :
+                res.status(404).json({ message: "Unexpected error on delete session." });
+        } catch (err) {
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public logout = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.unexpiredLogout()`;
+        try {
+            const sessionDeleted = await this.authorizationRequestService.logout(req, res);
+
+            return sessionDeleted ?
+                res.status(200).json({ success: true }) :
+                res.status(404).json({ message: "Unexpected error on delete session." });
         } catch (err) {
             if (err instanceof AppError) {
                 console.error(

@@ -1,6 +1,6 @@
 import { PermissionsValuesType } from "../Enums";
 
-export type PermissionEntity = {
+export type IPermissionEntity = {
     id?: string;
     userId?: string;
 } & {

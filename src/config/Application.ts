@@ -3,6 +3,10 @@
 import Dependencies from '@/types/Dependencies';
 import express, { Express } from 'express';
 import container from '@/config/container/index';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import { IAllowedOrigins, IOptions } from '@/types/config/Aplication';
 
 export class App {
     private app: Express;
@@ -10,6 +14,8 @@ export class App {
     private elasticSearchClient: Dependencies['elasticSearchClient'];
     private userRoutes: Dependencies['userRoutes'];
     private logRoutes: Dependencies['logRoutes'];
+    private allowedOrigins: IAllowedOrigins;
+    private options: IOptions;
 
     private sequelizeAdapter: Dependencies['sequelizeAdapter'];
     private logger: Dependencies['logger'];
@@ -23,6 +29,12 @@ export class App {
         this.userRoutes = userRoutes;
         this.logRoutes = logRoutes;
         this.app = express();
+
+        this.allowedOrigins = [environment.frontend_origin, environment.electron_origin];
+        this.options = {
+            origin: this.allowedOrigins,
+            credentials: true
+        };
     }
 
     async start() {
@@ -35,7 +47,9 @@ export class App {
 
     async intializeServer() {
         this.app.locals.container = container;
-        this.app.use(express.json());
+        this.app.use(bodyParser.json());
+        this.app.use(cookieParser());
+        this.app.use(cors(this.options));
         this.app.use('/api', [this.userRoutes.init(), this.logRoutes.init()]);
         this.app.listen(this.enrivonment.port, () => console.log(`Server running on port ${this.enrivonment.port}`));
     }

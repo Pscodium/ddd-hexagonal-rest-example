@@ -4,7 +4,7 @@
 import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 import { enums } from '@/shared/enums';
 import { EnumsType } from '@/types/Enums';
-import { PermissionEntity } from '@/types/entity/PermissionEntity';
+import { IPermissionEntity } from '@/types/entity/PermissionEntity';
 
 export class SequelizeUserModel extends Model {
     public id!: string;
@@ -18,7 +18,7 @@ export class SequelizeUserModel extends Model {
     public email!: string;
     public verifiedEmail!: boolean;
     public password!: string;
-    public Permission!: PermissionEntity;
+    public Permission!: IPermissionEntity;
 
     public static associate(models: any) {
         this.hasOne(models.Permission, {

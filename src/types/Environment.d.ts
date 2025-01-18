@@ -5,6 +5,8 @@ export interface EnvironmentVariables {
     database: DatabaseConnectionProps;
     integration: IntegrationProps;
     frontend_origin: string;
+    frontend_domain: string;
+    electron_origin: string;
 }
 
 export interface IntegrationProps {
