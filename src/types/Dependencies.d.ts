@@ -25,6 +25,7 @@ import { GetLogsUseCase } from '@/app/useCases/log/GetLogsUseCase';
 import { GetLogsFormattedUseCase } from '@/app/useCases/log/GetLogsFormattedUseCase';
 import { CreateUserUseCase } from '@/app/useCases/user/CreateUserUseCase';
 import { FindOneUserUseCase } from '@/app/useCases/user/FindOneUserUseCase';
+import { FindAllUserUseCase } from '@/app/useCases/user/FindAllUserUseCase';
 import { PasswordValidator } from '@/app/services/user/PasswordValidator';
 import { LoginUserUseCase } from '@/app/useCases/user/LoginUserUseCase';
 import { UnexpiredLoginUseCase } from '@/app/useCases/user/UnexpiredLoginUseCase';
@@ -82,6 +83,7 @@ export default interface Dependencies {
             /* User */
             createUserUseCase: CreateUserUseCase;
             findOneUserUseCase: FindOneUserUseCase;
+            findAllUserUseCase: FindAllUserUseCase;
             loginUserUseCase: LoginUserUseCase;
             unexpiredLoginUseCase: UnexpiredLoginUseCase;
             /* Log */

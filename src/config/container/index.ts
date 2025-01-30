@@ -22,10 +22,15 @@ import { PasswordValidator } from "@/app/services/user/PasswordValidator";
 // app
 import { CreateUserUseCase } from '@/app/useCases/user/CreateUserUseCase';
 import { FindOneUserUseCase } from '@/app/useCases/user/FindOneUserUseCase';
+import { UnexpiredLoginUseCase } from "@/app/useCases/user/UnexpiredLoginUseCase";
+import { FindAllUserUseCase } from "@/app/useCases/user/FindAllUserUseCase";
+import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
 import { GetLogsUseCase } from "@/app/useCases/log/GetLogsUseCase";
 import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseCase";
 
 // interface
+import { UserRoutes } from "@/interface/http/routes/UserRoutes";
+import { LogRoutes } from "@/interface/http/routes/LogsRoutes";
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from "@/interface/http/controllers/LogsController";
 import { PermissionRequestService } from "@/interface/http/services/PermissionRequestService";
@@ -38,10 +43,6 @@ import { environment } from "../Environment";
 // shared
 import { enums } from "@/shared/enums/index";
 import { regex } from "@/shared/utils/Regex";
-import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
-import { UserRoutes } from "@/interface/http/routes/UserRoutes";
-import { LogRoutes } from "@/interface/http/routes/LogsRoutes";
-import { UnexpiredLoginUseCase } from "@/app/useCases/user/UnexpiredLoginUseCase";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -53,6 +54,7 @@ container.register({
     /* User -- */
     createUserUseCase: asClass(CreateUserUseCase).singleton(),
     findOneUserUseCase: asClass(FindOneUserUseCase).singleton(),
+    findAllUserUseCase: asClass(FindAllUserUseCase).singleton(),
     loginUserUseCase: asClass(LoginUserUseCase).singleton(),
     unexpiredLoginUseCase: asClass(UnexpiredLoginUseCase).singleton(),
     /* Logs -- */

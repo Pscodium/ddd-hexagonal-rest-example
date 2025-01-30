@@ -22,6 +22,8 @@ export class UserRoutes {
         this.router.get('/electron/logout', this.authenticationMiddleware.validate, this.userController.unexpiredLogout);
         this.router.get('/check/auth', this.authenticationMiddleware.validate, this.userController.check);
         this.router.get('/logout', this.authenticationMiddleware.validate, this.userController.logout);
+        this.router.get('/data/user', this.authenticationMiddleware.validate, this.userController.getUserData);
+        this.router.get('/users', this.authenticationMiddleware.validate, this.userController.findAll);
         this.router.get('/user/:id', this.authenticationMiddleware.validate, this.userController.findOne);
 
         return this.router;
