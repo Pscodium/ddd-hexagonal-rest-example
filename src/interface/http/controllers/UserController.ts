@@ -5,16 +5,19 @@ import { Request, Response } from 'express';
 interface IUserController {
     create(req: Request, res: Response): Promise<Response>;
     findOne(req: Request, res: Response): Promise<Response>;
+    findAll(req: Request, res: Response): Promise<Response>;
     login(req: Request, res: Response): Promise<Response>;
     check(req: Request, res: Response): Promise<Response>;
     unexpiredLogin(req: Request, res: Response): Promise<Response>;
     unexpiredLogout(req: Request, res: Response): Promise<Response>;
     logout(req: Request, res: Response): Promise<Response>;
+    getUserData(req: Request, res: Response): Promise<Response>;
 }
 
 export class UserController implements IUserController {
     private createUserUseCase: Dependencies['createUserUseCase'];
     private findOneUserUseCase: Dependencies['findOneUserUseCase'];
+    private findAllUserUseCase: Dependencies['findAllUserUseCase'];
     private loginUserUseCase: Dependencies['loginUserUseCase'];
     private unexpiredLoginUseCase: Dependencies['unexpiredLoginUseCase'];
     private authorizationRequestService: Dependencies['authorizationRequestService'];
@@ -24,6 +27,7 @@ export class UserController implements IUserController {
     constructor({
         createUserUseCase,
         findOneUserUseCase,
+        findAllUserUseCase,
         loginUserUseCase,
         unexpiredLoginUseCase,
         authorizationRequestService,
@@ -33,6 +37,7 @@ export class UserController implements IUserController {
         Dependencies,
         | 'createUserUseCase'
         | 'findOneUserUseCase'
+        | 'findAllUserUseCase'
         | 'loginUserUseCase'
         | 'unexpiredLoginUseCase'
         | 'authorizationRequestService'
@@ -41,6 +46,7 @@ export class UserController implements IUserController {
     >) {
         this.createUserUseCase = createUserUseCase;
         this.findOneUserUseCase = findOneUserUseCase;
+        this.findAllUserUseCase = findAllUserUseCase;
         this.loginUserUseCase = loginUserUseCase;
         this.unexpiredLoginUseCase = unexpiredLoginUseCase;
 
@@ -151,6 +157,60 @@ export class UserController implements IUserController {
                 path: '/',
             });
 
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public getUserData = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.getUserData()`;
+        try {
+            if (!req.user) {
+                throw new AppError('User not found', 404);
+            }
+
+            return res.status(200).json(req.user);
+        } catch (err) {
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public findAll = async (req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.findAll()`;
+        try {
+            const users = await this.findAllUserUseCase.execute();
+
+            return res.status(200).json(users);
+        } catch (err) {
             if (err instanceof AppError) {
                 console.error(
                     JSON.stringify({

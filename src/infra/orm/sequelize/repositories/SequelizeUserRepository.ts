@@ -42,7 +42,11 @@ export class SequelizeUserRepository implements IUserRepository {
     }
 
     async findAll(): Promise<User[]> {
-        const users = await SequelizeUserModel.findAll();
+        const users = await SequelizeUserModel.findAll({
+            attributes: {
+                exclude: ['password']
+            }
+        });
         return users.map((u) => new User(u));
     }
 
@@ -56,12 +60,12 @@ export class SequelizeUserRepository implements IUserRepository {
 
     async findByEmail(email: string): Promise<User | null> {
         const user = await SequelizeUserModel.findOne({ where: { email }});
-        return user;
+        return user ? new User(user.toJSON()) : null;
     }
 
     async findByEmailOrNickname(login: string | undefined | null): Promise<User | null> {
         const user = await SequelizeUserModel.findOne({ where: {[Op.or]: [{ email: login }, { nickname: login }]}});
-        return user;
+        return user ? new User(user.toJSON()) : null;
     }
 
     async nickExists(nickname: string): Promise<boolean> {
