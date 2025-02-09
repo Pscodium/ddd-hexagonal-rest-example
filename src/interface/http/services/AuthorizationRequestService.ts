@@ -39,7 +39,7 @@ export class AuthorizationRequestService {
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
-            throw new AppError('Invalid user id.', 403);
+            throw new AppError('Invalid user id.', 401);
         }
 
         return new User(user);

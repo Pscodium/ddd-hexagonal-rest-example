@@ -219,14 +219,14 @@ export class UserController implements IUserController {
                     }),
                 );
                 this.logger.error(
-                    `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
+                    `[REQUEST ERROR] - ${err.message}`,
                 );
                 return res.status(err.status).json({ message: err.stack });
             }
 
             return res
                 .status(500)
-                .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+                .json({ stack: `[REQUEST ERROR] - Bad Request` });
         }
     };
 

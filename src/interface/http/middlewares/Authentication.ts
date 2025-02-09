@@ -22,7 +22,7 @@ export class AuthenticationMiddleware {
             const { authorization, cookie } = req.headers;
             
             if (!authorization && !cookie) {
-                throw new AppError('You need to provides a authorization token.', 403);
+                throw new AppError('You need to provides a authorization token.', 401);
             }
 
             if (cookie) {
@@ -72,7 +72,7 @@ export class AuthenticationMiddleware {
                 if (hasPermission) {
                     return next();
                 }
-                throw new AppError("You don't have permissions for use this route.", 401);
+                throw new AppError("You don't have permissions for use this route.", 403);
             } catch (err) {
                 if (err instanceof AppError) {
                     console.error(JSON.stringify({ 

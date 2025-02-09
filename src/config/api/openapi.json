@@ -1,0 +1,870 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Logs e Usuários",
+    "version": "1.0.0",
+    "description": "API para gerenciamento de logs e usuários com autenticação via Bearer Token."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/api",
+      "description": "Local"
+    },
+    {
+      "url": "https://api.pscodium.dev/api",
+      "description": "Prod"
+    }
+  ],
+  "tags": [
+    {
+      "name": "logs",
+      "description": "Logs Requests"
+    },
+    {
+      "name": "users",
+      "description": "Users Requests"
+    }
+  ],
+  "paths": {
+    "/logs/get": {
+      "get": {
+        "tags": [
+          "logs"
+        ],
+        "summary": "Obter logs",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logs obtidos com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "[REQUEST ERROR] - Error trying get logs"
+          },
+          "5XX": {
+            "description": "[REQUEST ERROR] - Bad Request"
+          }
+        }
+      }
+    },
+    "/logs/get/format": {
+      "get": {
+        "tags": [
+          "logs"
+        ],
+        "summary": "Obter logs formatados",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logs formatados obtidos com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "[REQUEST ERROR] - Error trying get logs"
+          },
+          "5XX": {
+            "description": "[REQUEST ERROR] - Bad Request"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Registrar um novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": {
+                    "type": "string"
+                  },
+                  "lastName": {
+                    "type": "string"
+                  },
+                  "nickname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário registrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponseSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[ERROR](400) - Invalid password pattern."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[ERROR](409) - User already exists."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Login do usuário",
+        "description": "Faz login e retorna um token JWT. O tipo de login pode ser alterado com o parâmetro `type`.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "login": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckAuthResponseSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](401) - You need to provides a authorization token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](403) - You don't have permissions for use this route."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/check/auth": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Verificar autenticação do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário autenticado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckAuthResponseSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](401) - You need to provides a authorization token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](403) - You don't have permissions for use this route."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/logout": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Logout do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "Unexpected error on delete session."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data/user": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Obter dados do usuário",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do usuário obtidos com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckAuthResponseSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](401) - You need to provides a authorization token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](403) - You don't have permissions for use this route."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Obter todos os usuários",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários obtida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/UsersResponseSchema"
+                      },
+                      {
+                        "$ref": "#/components/schemas/UsersResponseSchema"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](401) - You need to provides a authorization token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](403) - You don't have permissions for use this route."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Obter um usuário específico",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do usuário",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário obtido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](401) - You need to provides a authorization token."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](403) - You don't have permissions for use this route."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "default": "[ERROR](404) - User does not exist (Invalid ID)."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "stack": {
+                      "type": "string",
+                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LogSchema": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "_index": {
+            "type": "string",
+            "default": "logs"
+          },
+          "_score": {
+            "type": "integer",
+            "default": null
+          },
+          "message": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "default": "0000-000-00T00:00:00.000Z"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "UserSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "profileIcon": {
+            "type": "string"
+          },
+          "nickname": {
+            "type": "string"
+          },
+          "externalId": {
+            "type": "string",
+            "description": "External ID for firebase"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "default",
+              "customer",
+              "owner",
+              "developer",
+              "admin"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "offline"
+            ]
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "verifiedEmail": {
+            "type": "boolean"
+          },
+          "password": {
+            "type": "string",
+            "writeOnly": true
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      },
+      "PermissionSchema": {
+        "type": "object",
+        "properties": {
+          "master_admin_level": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_manage_roles": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_generate_apikey": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_access_private_routes": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_access_admin_routes": {
+            "type": "boolean",
+            "default": false
+          },
+          "can_post_article": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "RegisterResponseSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "token": {
+                "writeOnly": true
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "CheckAuthResponseSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "password": {},
+              "Permission": {
+                "allOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PermissionSchema"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UsersResponseSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UserSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "password": {},
+              "token": {
+                "writeOnly": true
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "UserResponseSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/UsersResponseSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Permission": {
+                "allOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PermissionSchema"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Token de autenticação Bearer com 36 caracteres."
+      }
+    }
+  }
+}
