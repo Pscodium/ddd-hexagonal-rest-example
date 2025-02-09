@@ -6,6 +6,8 @@ import container from '@/config/container/index';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import swaggerUi from 'swagger-ui-express';
+import docs from './api/openapi.json';
 import { IAllowedOrigins, IOptions } from '@/types/config/Aplication';
 
 export class App {
@@ -50,6 +52,8 @@ export class App {
         this.app.use(bodyParser.json());
         this.app.use(cookieParser());
         this.app.use(cors(this.options));
+        this.app.use('/api-docs', swaggerUi.serve);
+        this.app.get('/api-docs', swaggerUi.setup(docs));
         this.app.use('/api', [this.userRoutes.init(), this.logRoutes.init()]);
         this.app.listen(this.enrivonment.port, () => console.log(`Server running on port ${this.enrivonment.port}`));
     }
