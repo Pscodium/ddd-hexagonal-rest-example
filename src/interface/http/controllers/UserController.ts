@@ -69,15 +69,9 @@ export class UserController implements IUserController {
     public create = async (req: Request, res: Response): Promise<Response> => {
         const callName = `${this.constructor.name}.create()`;
         try {
-            const { firstName, lastName, nickname, email, password } = req.body;
+            const data = req.body;
 
-            const user = await this.createUserUseCase.execute({
-                firstName,
-                lastName,
-                nickname,
-                password,
-                email,
-            });
+            const user = await this.createUserUseCase.execute(data);
 
             return res.status(200).json(user);
         } catch (err: unknown) {
@@ -128,12 +122,10 @@ export class UserController implements IUserController {
         const callName = `${this.constructor.name}.login()`;
         try {
             const { origin } = req.headers;
-            const { login, password } = req.body;
+            const data = req.body;
+            data.origin = origin;
             
-            const user = await this.loginUserUseCase.execute(
-                { login, password, origin },
-                res,
-            );
+            const user = await this.loginUserUseCase.execute(data, res);
 
             return res.status(200).json(user);
         } catch (err: unknown) {

@@ -8,7 +8,7 @@ export class PasswordValidator {
     }
 
     validadePassword(password: string): boolean {
-        return this.regex.PASSWORD_REGEX.test(password);
+        return this.regex.validator.PASSWORD_REGEX.test(password);
     }
 
     encryptPassword(password: string): string {
