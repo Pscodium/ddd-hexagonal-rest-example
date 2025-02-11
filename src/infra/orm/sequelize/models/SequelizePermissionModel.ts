@@ -12,7 +12,8 @@ export class SequelizePermissionModel extends Model<IPermissionEntity> {
     public static associate(models: any) {
         this.belongsTo(models.User, {
             foreignKey: 'userId',
-            as: 'User'
+            as: 'User',
+            onDelete: 'CASCADE'
         });
     }
 }

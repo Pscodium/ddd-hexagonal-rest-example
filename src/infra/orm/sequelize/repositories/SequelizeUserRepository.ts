@@ -55,7 +55,7 @@ export class SequelizeUserRepository implements IUserRepository {
     }
 
     async delete(id: string): Promise<void> {
-        await SequelizeUserModel.destroy({ where: { id } });
+        await SequelizeUserModel.destroy({ where: { id }, cascade: true });
     }
 
     async findByEmail(email: string): Promise<User | null> {

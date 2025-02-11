@@ -29,6 +29,7 @@ import { FindAllUserUseCase } from '@/app/useCases/user/FindAllUserUseCase';
 import { PasswordValidator } from '@/app/services/user/PasswordValidator';
 import { LoginUserUseCase } from '@/app/useCases/user/LoginUserUseCase';
 import { UnexpiredLoginUseCase } from '@/app/useCases/user/UnexpiredLoginUseCase';
+import { DeleteUserUseCase } from '@/app/useCases/user/DeleteUserUseCase';
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
@@ -47,6 +48,8 @@ import { EnumsType } from '@/types/Enums';
 
 // Default Imports
 import { ModelStatic } from 'sequelize';
+import SchemaMiddleware from '@/interface/http/middlewares/SchemaMiddleware';
+import { UpdatePermissionUseCase } from '@/app/useCases/permission/UpdatePermissionUseCase';
 
 export default interface Dependencies {
     /* INFRA - */
@@ -86,6 +89,9 @@ export default interface Dependencies {
             findAllUserUseCase: FindAllUserUseCase;
             loginUserUseCase: LoginUserUseCase;
             unexpiredLoginUseCase: UnexpiredLoginUseCase;
+            deleteUserUseCase: DeleteUserUseCase;
+            /* Permission */
+            updatePermissionUseCase: UpdatePermissionUseCase;
             /* Log */
             getLogsUseCase: GetLogsUseCase;
             getLogsFormattedUseCase: GetLogsFormattedUseCase;
@@ -105,6 +111,7 @@ export default interface Dependencies {
             permissionRequestService: PermissionRequestService;
             /* Middlewares */
             authenticationMiddleware: AuthenticationMiddleware;
+            schemaMiddleware: SchemaMiddleware;
 
     /* CONFIG - */
         /* Environment */

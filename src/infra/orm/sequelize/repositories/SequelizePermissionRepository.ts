@@ -15,4 +15,8 @@ export class SequelizePermissionRepository implements IPermissionRepository {
 
         return permission ? new Permission(permission) : null;
     }
+
+    async updateUserPermission(permission: Partial<Permission>): Promise<[affectedCount: number]> {
+        return await SequelizePermissionModel.update(permission, { where: { userId: permission.userId }});
+    }
 }
