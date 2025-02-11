@@ -27,6 +27,8 @@ import { FindAllUserUseCase } from "@/app/useCases/user/FindAllUserUseCase";
 import { LoginUserUseCase } from "@/app/useCases/user/LoginUserUseCase";
 import { GetLogsUseCase } from "@/app/useCases/log/GetLogsUseCase";
 import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseCase";
+import { DeleteUserUseCase } from "@/app/useCases/user/DeleteUserUseCase";
+import { UpdatePermissionUseCase } from "@/app/useCases/permission/UpdatePermissionUseCase";
 
 // interface
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
@@ -43,6 +45,7 @@ import { environment } from "../Environment";
 // shared
 import { enums } from "@/shared/enums/index";
 import { regex } from "@/shared/utils/Regex";
+import SchemaMiddleware from "@/interface/http/middlewares/SchemaMiddleware";
 
 const container = createContainer({
     injectionMode: "PROXY",
@@ -57,6 +60,8 @@ container.register({
     findAllUserUseCase: asClass(FindAllUserUseCase).singleton(),
     loginUserUseCase: asClass(LoginUserUseCase).singleton(),
     unexpiredLoginUseCase: asClass(UnexpiredLoginUseCase).singleton(),
+    deleteUserUseCase: asClass(DeleteUserUseCase).singleton(),
+    updatePermissionUseCase: asClass(UpdatePermissionUseCase).singleton(),
     /* Logs -- */
     getLogsUseCase: asClass(GetLogsUseCase).singleton(),
     getLogsFormattedUseCase: asClass(GetLogsFormattedUseCase).singleton(),
@@ -101,6 +106,7 @@ container.register({
     permissionRequestService: asClass(PermissionRequestService).singleton(),
     /* Middlewares - */
     authenticationMiddleware: asClass(AuthenticationMiddleware).singleton(),
+    schemaMiddleware: asClass(SchemaMiddleware).singleton(),
 
     /* CONFIG */
     environment: asValue(environment),

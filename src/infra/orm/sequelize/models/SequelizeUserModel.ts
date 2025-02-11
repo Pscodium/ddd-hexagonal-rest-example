@@ -23,7 +23,8 @@ export class SequelizeUserModel extends Model {
     public static associate(models: any) {
         this.hasOne(models.Permission, {
             foreignKey: 'userId',
-            as: 'Permission'
+            as: 'Permission',
+            onDelete: 'CASCADE'
         });
     }
 }

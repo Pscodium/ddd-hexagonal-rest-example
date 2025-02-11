@@ -12,7 +12,8 @@ export class SequelizeSessionModel extends Model {
 
     public static associate(models: any) {
         this.belongsTo(models.User, {
-            foreignKey: 'userId'
+            foreignKey: 'userId',
+            onDelete: 'CASCADE'
         });
     }
 }

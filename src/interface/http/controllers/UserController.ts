@@ -1,5 +1,6 @@
 import { AppError } from '@/shared/errors/AppError';
 import Dependencies from '@/types/Dependencies';
+import { IPermissionEntity } from '@/types/entity/PermissionEntity';
 import { Request, Response } from 'express';
 
 interface IUserController {
@@ -12,6 +13,8 @@ interface IUserController {
     unexpiredLogout(req: Request, res: Response): Promise<Response>;
     logout(req: Request, res: Response): Promise<Response>;
     getUserData(req: Request, res: Response): Promise<Response>;
+    delete(req: Request, res: Response): Promise<Response>;
+    updatePerms(req: Request, res: Response): Promise<Response>;
 }
 
 export class UserController implements IUserController {
@@ -20,6 +23,8 @@ export class UserController implements IUserController {
     private findAllUserUseCase: Dependencies['findAllUserUseCase'];
     private loginUserUseCase: Dependencies['loginUserUseCase'];
     private unexpiredLoginUseCase: Dependencies['unexpiredLoginUseCase'];
+    private deleteUserUseCase: Dependencies['deleteUserUseCase'];
+    private updatePermissionUseCase: Dependencies['updatePermissionUseCase'];
     private authorizationRequestService: Dependencies['authorizationRequestService'];
     private environment: Dependencies['environment'];
     private logger: Dependencies['logger'];
@@ -30,6 +35,8 @@ export class UserController implements IUserController {
         findAllUserUseCase,
         loginUserUseCase,
         unexpiredLoginUseCase,
+        deleteUserUseCase,
+        updatePermissionUseCase,
         authorizationRequestService,
         environment,
         logger,
@@ -40,6 +47,8 @@ export class UserController implements IUserController {
         | 'findAllUserUseCase'
         | 'loginUserUseCase'
         | 'unexpiredLoginUseCase'
+        | 'deleteUserUseCase'
+        | 'updatePermissionUseCase'
         | 'authorizationRequestService'
         | 'environment'
         | 'logger'
@@ -49,6 +58,8 @@ export class UserController implements IUserController {
         this.findAllUserUseCase = findAllUserUseCase;
         this.loginUserUseCase = loginUserUseCase;
         this.unexpiredLoginUseCase = unexpiredLoginUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
+        this.updatePermissionUseCase = updatePermissionUseCase;
 
         this.authorizationRequestService = authorizationRequestService;
         this.environment = environment;
@@ -314,6 +325,89 @@ export class UserController implements IUserController {
             return res
                 .status(500)
                 .json({ stack: `[AUTHORIZATION REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public delete = async(req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.delete()`;
+        try {
+            const { id } = req.params;
+
+            if (!id) {
+                this.logger.error(
+                    `[REQUEST ERROR] - Missing required route parameter 'id'`,
+                );
+                return res.status(400).json({
+                    message: "[REQUEST ERROR] - Missing required route parameter 'id'"
+                });
+            }
+
+            await this.deleteUserUseCase.execute(id);
+
+            return res.status(200).json({ success: true });
+        } catch (err) {
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public updatePerms = async(req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.updatePerms()`;
+        try {
+            const id = req.params.id;
+            const permissions: IPermissionEntity = req.body;
+            permissions.userId = id;
+            
+            if (!id) {
+                this.logger.error(
+                    `[REQUEST ERROR] - Missing required route parameter 'id'`,
+                );
+                return res.status(400).json({
+                    message: "[REQUEST ERROR] - Missing required route parameter 'id'"
+                });
+            }
+
+            const updated = await this.updatePermissionUseCase.execute(permissions);
+
+            if (updated == 0) {
+                this.logger.warn(
+                    `[REQUEST WARN] - Permissions have not been changed`,
+                );
+                return res.status(400).json("[REQUEST WARN] - Permissions have not been changed");
+            }
+
+            return res.status(200).json({ success: true });
+        } catch (err) {
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[REQUEST ERROR] - Bad Request` });
         }
     };
 }
