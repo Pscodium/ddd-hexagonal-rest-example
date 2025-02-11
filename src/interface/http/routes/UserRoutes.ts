@@ -3,7 +3,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Router } from 'express';
 import Dependencies from '@/types/Dependencies';
-import { updatePermissionSchema } from '@/domain/schemas/user/UpdatePermissionSchema';
+import { updatePermissionSchema } from '@/domain/schemas/user/UpdatePermissionRequestSchema';
+import { loginRequestSchema, registerRequestSchema } from '@/domain/schemas/user/AuthenticationRequestSchema';
 
 export class UserRoutes {
     private router: any;
@@ -22,9 +23,9 @@ export class UserRoutes {
     public init(): Router {
 
         // Authentication routes
-        this.router.post('/register', this.userController.create);
-        this.router.post('/login', this.userController.login);
-        this.router.post('/electron/login', this.userController.unexpiredLogin);
+        this.router.post('/register', this.schemaMiddleware.loadSchema(registerRequestSchema), this.userController.create);
+        this.router.post('/login', this.schemaMiddleware.loadSchema(loginRequestSchema), this.userController.login);
+        this.router.post('/electron/login', this.schemaMiddleware.loadSchema(loginRequestSchema), this.userController.unexpiredLogin);
         this.router.get('/electron/logout', this.authenticationMiddleware.validate, this.userController.unexpiredLogout);
         this.router.get('/check/auth', this.authenticationMiddleware.validate, this.userController.check);
         this.router.get('/logout', this.authenticationMiddleware.validate, this.userController.logout);
