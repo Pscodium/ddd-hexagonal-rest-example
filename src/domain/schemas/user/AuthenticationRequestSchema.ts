@@ -2,8 +2,8 @@ import { z } from "zod";
 import { regex } from '@/shared/utils/Regex';
 
 const loginRequestSchema = z.object({
-    login: z.string(),
-    password: z.string()
+    login: z.string({ message: '[SCHEMA ERROR] - Missing Field' }),
+    password: z.string({ message: '[SCHEMA ERROR] - Missing Field' })
 });
 
 const registerRequestSchema = z.object({
