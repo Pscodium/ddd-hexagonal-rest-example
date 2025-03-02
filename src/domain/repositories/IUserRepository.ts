@@ -6,7 +6,7 @@ export interface IUserRepository {
     findByEmailOrNickname(login: string): Promise<User | null>;
     findById(id: string | undefined): Promise<User | null>;
     findAll(): Promise<User[]>;
-    update(id: string, user: Partial<User>): Promise<void>;
+    update(id: string, user: Partial<User>): Promise<[affectedCount: number]>;
     delete(id: string): Promise<void>;
     nickExists(nickname: string): Promise<boolean>;
 };

@@ -50,8 +50,8 @@ export class SequelizeUserRepository implements IUserRepository {
         return users.map((u) => new User(u));
     }
 
-    async update(id: string, user: Partial<User>): Promise<void> {
-        await SequelizeUserModel.update(user, { where: { id } });
+    async update(id: string, user: Partial<User>): Promise<[affectedCount: number]> {
+        return await SequelizeUserModel.update(user, { where: { id } });
     }
 
     async delete(id: string): Promise<void> {

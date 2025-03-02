@@ -1,6 +1,7 @@
 import { AppError } from '@/shared/errors/AppError';
 import Dependencies from '@/types/Dependencies';
 import { IPermissionEntity } from '@/types/entity/PermissionEntity';
+import { IUserEntity } from '@/types/entity/UserEntity';
 import { Request, Response } from 'express';
 
 interface IUserController {
@@ -15,6 +16,7 @@ interface IUserController {
     getUserData(req: Request, res: Response): Promise<Response>;
     delete(req: Request, res: Response): Promise<Response>;
     updatePerms(req: Request, res: Response): Promise<Response>;
+    update(req: Request, res: Response): Promise<Response>;
 }
 
 export class UserController implements IUserController {
@@ -25,6 +27,7 @@ export class UserController implements IUserController {
     private unexpiredLoginUseCase: Dependencies['unexpiredLoginUseCase'];
     private deleteUserUseCase: Dependencies['deleteUserUseCase'];
     private updatePermissionUseCase: Dependencies['updatePermissionUseCase'];
+    private updateUserUseCase: Dependencies['updateUserUseCase'];
     private authorizationRequestService: Dependencies['authorizationRequestService'];
     private environment: Dependencies['environment'];
     private logger: Dependencies['logger'];
@@ -37,6 +40,7 @@ export class UserController implements IUserController {
         unexpiredLoginUseCase,
         deleteUserUseCase,
         updatePermissionUseCase,
+        updateUserUseCase,
         authorizationRequestService,
         environment,
         logger,
@@ -49,6 +53,7 @@ export class UserController implements IUserController {
         | 'unexpiredLoginUseCase'
         | 'deleteUserUseCase'
         | 'updatePermissionUseCase'
+        | 'updateUserUseCase'
         | 'authorizationRequestService'
         | 'environment'
         | 'logger'
@@ -60,6 +65,7 @@ export class UserController implements IUserController {
         this.unexpiredLoginUseCase = unexpiredLoginUseCase;
         this.deleteUserUseCase = deleteUserUseCase;
         this.updatePermissionUseCase = updatePermissionUseCase;
+        this.updateUserUseCase = updateUserUseCase;
 
         this.authorizationRequestService = authorizationRequestService;
         this.environment = environment;
@@ -374,6 +380,42 @@ export class UserController implements IUserController {
             }
 
             const updated = await this.updatePermissionUseCase.execute(permissions);
+
+            if (updated == 0) {
+                this.logger.warn(
+                    `[REQUEST WARN] - Permissions have not been changed`,
+                );
+                return res.status(400).json("[REQUEST WARN] - Permissions have not been changed");
+            }
+
+            return res.status(200).json({ success: true });
+        } catch (err) {
+            if (err instanceof AppError) {
+                console.error(
+                    JSON.stringify({
+                        message: `[REQUEST ERROR] - ${callName}`,
+                        stack: err.stack,
+                    }),
+                );
+                this.logger.error(
+                    `[REQUEST ERROR] - ${err.message}`,
+                );
+                return res.status(err.status).json({ message: err.stack });
+            }
+
+            return res
+                .status(500)
+                .json({ stack: `[REQUEST ERROR] - Bad Request` });
+        }
+    };
+
+    public update = async(req: Request, res: Response): Promise<Response> => {
+        const callName = `${this.constructor.name}.update()`;
+        try {
+            const user: IUserEntity = req.body;
+            user.id = req.userId;
+
+            const updated = await this.updateUserUseCase.execute(user);
 
             if (updated == 0) {
                 this.logger.warn(

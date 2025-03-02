@@ -29,6 +29,7 @@ import { GetLogsUseCase } from "@/app/useCases/log/GetLogsUseCase";
 import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseCase";
 import { DeleteUserUseCase } from "@/app/useCases/user/DeleteUserUseCase";
 import { UpdatePermissionUseCase } from "@/app/useCases/permission/UpdatePermissionUseCase";
+import { UpdateUserUseCase } from "@/app/useCases/user/UpdateUserUseCase";
 
 // interface
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
@@ -62,6 +63,7 @@ container.register({
     unexpiredLoginUseCase: asClass(UnexpiredLoginUseCase).singleton(),
     deleteUserUseCase: asClass(DeleteUserUseCase).singleton(),
     updatePermissionUseCase: asClass(UpdatePermissionUseCase).singleton(),
+    updateUserUseCase: asClass(UpdateUserUseCase).singleton(),
     /* Logs -- */
     getLogsUseCase: asClass(GetLogsUseCase).singleton(),
     getLogsFormattedUseCase: asClass(GetLogsFormattedUseCase).singleton(),
