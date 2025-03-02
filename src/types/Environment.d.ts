@@ -17,6 +17,19 @@ export interface IntegrationProps {
             password: string;
         }
     }
+    storage: {
+        providers: {
+            storage: {
+                endpoint: string;
+                region: string;
+                bucket: string;
+                path: string;
+                accessKeyId: string;
+                secretAccessKey: string;
+                signatureVersion: string;
+            }
+        }
+    }
 }
 
 export interface DatabaseConnectionProps {

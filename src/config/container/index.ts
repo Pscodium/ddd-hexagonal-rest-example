@@ -8,6 +8,8 @@ import { ElasticSearchClient } from "@/infra/integration/elasticSearch/client";
 import { ElasticSearchLogsRepository } from "@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository";
 import { SequelizeSessionRepository } from "@/infra/orm/sequelize/repositories/SequelizeSessionRepository";
 import { SequelizePermissionRepository } from "@/infra/orm/sequelize/repositories/SequelizePermissionRepository";
+import { StorageS3Client } from "@/infra/integration/storage/client";
+import { StorageRepository } from "@/infra/integration/storage/repositories/StorageRepository";
 import { Logger } from "@/infra/integration/elasticSearch/logger";
 import { SequelizeSessionModel } from "@/infra/orm/sequelize/models/SequelizeSessionModel";
 import { SequelizeUserModel } from "@/infra/orm/sequelize/models/SequelizeUserModel";
@@ -79,11 +81,15 @@ container.register({
     /* INFRA */
     /* Adapter - */
     sequelizeAdapter: asClass(SequelizeAdapter).singleton(),
-    /* Integration - */
+    /* Integration -- */
+    /* ElasticSearch - */
     elasticSearchClient: asClass(ElasticSearchClient).singleton(),
     logger: asClass(Logger).singleton(),
+    /* Storage */
+    storageClient: asClass(StorageS3Client).singleton(),
     /* Repository -- */
     logsRepository: asClass(ElasticSearchLogsRepository).singleton(),
+    storageRepository: asClass(StorageRepository).singleton(),
     /* Orm -*/
     /* Models -*/
     sequelizeSessionModel: asClass(SequelizeSessionModel).singleton(),
