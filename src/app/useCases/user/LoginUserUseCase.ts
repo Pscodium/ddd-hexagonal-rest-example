@@ -27,7 +27,7 @@ export class LoginUserUseCase {
             throw new AppError('User not exists.', 404);
         }
         
-        const passwordValidate = this.passwordValidator.passwordComparator(data.password, userExists.password);
+        const passwordValidate = await this.passwordValidator.passwordComparator(data.password, userExists.password);
         
         if (!passwordValidate) {
             throw new AppError('Invalid password.', 404);

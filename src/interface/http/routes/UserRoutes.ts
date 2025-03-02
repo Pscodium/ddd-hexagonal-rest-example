@@ -5,6 +5,7 @@ import { Router } from 'express';
 import Dependencies from '@/types/Dependencies';
 import { updatePermissionSchema } from '@/domain/schemas/user/UpdatePermissionRequestSchema';
 import { loginRequestSchema, registerRequestSchema } from '@/domain/schemas/user/AuthenticationRequestSchema';
+import { updateRequestSchema } from '@/domain/schemas/user/UpdateRequestSchema';
 
 export class UserRoutes {
     private router: any;
@@ -35,6 +36,7 @@ export class UserRoutes {
         this.router.get('/users', this.authenticationMiddleware.validate, this.userController.findAll);
         this.router.get('/user/:id', this.authenticationMiddleware.validate, this.userController.findOne);
         this.router.delete('/user/:id', this.authenticationMiddleware.validate, this.authenticationMiddleware.hasPermissions([this.enums.Permissions.MASTER_ADMIN_LEVEL]), this.userController.delete);
+        this.router.put('/user/update', this.authenticationMiddleware.validate, this.schemaMiddleware.loadSchema(updateRequestSchema), this.userController.update);
         this.router.put('/user/:id/update/perms', this.authenticationMiddleware.validate, this.authenticationMiddleware.hasPermissions([this.enums.Permissions.MASTER_ADMIN_LEVEL]), this.schemaMiddleware.loadSchema(updatePermissionSchema), this.userController.updatePerms);
 
         return this.router;
