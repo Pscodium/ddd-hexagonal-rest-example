@@ -6,6 +6,8 @@ import { Logger } from '@/infra/integration/elasticSearch/logger';
 import { SequelizeSessionModel } from '@/infra/orm/sequelize/models/SequelizeSessionModel';
 import { ElasticSearchLogsRepository } from '@/infra/integration/elasticSearch/repositories/ElasticSearchLogsRepository';
 import { SequelizeSessionRepository } from '@/infra/orm/sequelize/repositories/SequelizeSessionRepository';
+import { StorageS3Client } from '@/infra/integration/storage/client';
+import { IStorageRepository } from '@/domain/repositories/storage/IStorageRepository';
 import { SequelizeUserModel } from '@/infra/orm/sequelize/models/SequelizeUserModel';
 import { PermissionRequestService } from '@/interface/http/services/PermissionRequestService';
 import { SequelizePermissionRepository } from '@/infra/orm/sequelize/repositories/SequelizePermissionRepository';
@@ -50,6 +52,7 @@ import { EnumsType } from '@/types/Enums';
 
 // Default Imports
 import { ModelStatic } from 'sequelize';
+import { S3 } from 'aws-sdk';
 import SchemaMiddleware from '@/interface/http/middlewares/SchemaMiddleware';
 
 export default interface Dependencies {
@@ -66,8 +69,12 @@ export default interface Dependencies {
             sequelizeSessionRepository: SequelizeSessionRepository;
             sequelizePermissionRepository: SequelizePermissionRepository;
         /* Integration */
-        elasticSearchClient: ElasticSearchClient;
-        logger: Logger;
+            /* ElasticSearch */
+            elasticSearchClient: ElasticSearchClient;
+            logger: Logger;
+            /* Storage */
+            storageClient: StorageS3Client;
+        
             /* Repository */
             elasticSearchLogsRepository: ElasticSearchLogsRepository;
 
@@ -80,6 +87,7 @@ export default interface Dependencies {
         userRepository: IUserRepository;
         permissionRepository: IPermissionRepository;
         logsRepository: ILogsRepository;
+        storageRepository: IStorageRepository;
         sessionRepository: ISessionRepository;
 
     /* APP - */
@@ -124,6 +132,8 @@ export default interface Dependencies {
         enums: EnumsType;
         /* Utils */
         regex: RegexType;
+        /* Types */
+        storageType: S3
 
 // eslint-disable-next-line semi
 };

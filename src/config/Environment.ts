@@ -19,6 +19,19 @@ export const environment: EnvironmentVariables = {
                 password: process.env.ELASTIC_PASSWORD ?? '', 
                 username: process.env.ELASTIC_USERNAME ?? ''
             }
+        },
+        storage: {
+            providers: {
+                storage: {
+                    endpoint: process.env.STORAGE_ENDPOINT ?? '',
+                    region: process.env.STORAGE_REGION ?? '',
+                    bucket: process.env.STORAGE_BUCKET ?? '',
+                    path: process.env.STORAGE_PATH ?? '',
+                    accessKeyId: process.env.STORAGE_ACCESS_KEY_ID ?? '',
+                    secretAccessKey: process.env.STORAGE_SECRET_ACCESS_KEY ?? '',
+                    signatureVersion: 'v4'
+                }
+            }
         }
     },
     frontend_domain: process.env.FRONTEND_DOMAIN ?? 'localhost',
