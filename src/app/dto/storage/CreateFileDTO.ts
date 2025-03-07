@@ -3,6 +3,6 @@ export interface CreateFileDTO {
     type: string;
     url: string;
     UserId?: string;
-    folderId?: string;
+    FolderId?: string;
     private?: boolean;
 }

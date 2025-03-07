@@ -13,13 +13,19 @@ export class DeleteFileUseCase {
 
     async execute(fileId: string, folderId: string): Promise<void> {
         const fileExists = await this.fileRepository.findOne(fileId);
-        const folderExists = await this.folderRepository.findOne(folderId);
 
-        if (!fileExists || !folderExists) {
-            this.logger.error('File or Folder not found');
-            throw new AppError('File of Folder not found', 404);
+        if (!fileExists) {
+            this.logger.error('File not found');
+            throw new AppError('File not found', 404);
         }
 
-        return await this.fileRepository.delete(fileId, folderId);
+        const hasFileOnFolder = await this.fileRepository.hasFileOnFolder(folderId, fileId);
+
+        if (!hasFileOnFolder) {
+            this.logger.error('This file does not belong in this folder');
+            throw new AppError('This file does not belong in this folder', 400);
+        }
+
+        return await this.fileRepository.delete(fileId);
     }
 }

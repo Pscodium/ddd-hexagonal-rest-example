@@ -21,7 +21,8 @@ export class SequelizeFileRepository implements IFileRepository {
             name: data.name,
             url: data.url,
             UserId: data.UserId,
-            type: data.type
+            type: data.type,
+            FolderId: data.FolderId
         });
 
         return file ? new File(file) : null;
@@ -57,5 +58,15 @@ export class SequelizeFileRepository implements IFileRepository {
             order: [['createdAt', 'DESC']]
         });
         return files.map((f: any) => new File(f));
+    }
+
+    async hasFileOnFolder(folderId: string, fileId: string): Promise<boolean> {
+        const file = await SequelizeFileModel.findOne({
+            where: {
+                FolderId: folderId,
+                id: fileId
+            }
+        });
+        return !!file;
     }
 }

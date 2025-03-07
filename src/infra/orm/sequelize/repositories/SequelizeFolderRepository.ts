@@ -44,11 +44,11 @@ export class SequelizeFolderRepository implements IFolderRepository {
             u.id AS UserId,
             f.hex,
             f.private,
-            COALESCE(COUNT(ff.FileId), 0) AS filesCount,
+            COALESCE(COUNT(fi.id), 0) AS filesCount,
             f.createdAt,
             f.updatedAt,
             CASE 
-                WHEN COUNT(ff.FileId) = 0 THEN JSON_ARRAY()
+                WHEN COUNT(fi.id) = 0 THEN JSON_ARRAY()
                 ELSE COALESCE(
                     JSON_ARRAYAGG(
                         JSON_OBJECT(
@@ -65,8 +65,7 @@ export class SequelizeFolderRepository implements IFolderRepository {
             END AS File
         FROM folder f
         INNER JOIN users u ON f.UserId = u.id
-        LEFT JOIN file_folders ff ON f.id = ff.FolderId
-        LEFT JOIN file fi on ff.FileId = fi.id
+        LEFT JOIN file fi on fi.FolderId = f.id
         GROUP BY
             f.id,
             f.name,

@@ -20,13 +20,7 @@ export class SequelizeFolderModel extends Model {
             foreignKey: 'UserId',
             onDelete: 'CASCADE'
         });
-        this.belongsToMany(models.File, {
-            as: "File",
-            through: "file_folders",
-            foreignKey: "FolderId",
-            timestamps: true,
-            onDelete: 'CASCADE'
-        });
+        this.hasMany(models.File, { as: 'File', foreignKey: 'FolderId' });
     }
 }
 
@@ -77,27 +71,12 @@ export const initSequelizeFolderModel = (sequelize: Sequelize) => {
                         model: SequelizeFileModel,
                         as: "File",
                         order: [['createdAt', 'DESC']],
-                        through: {
-                            attributes: []
-                        },
                     });
             
                     options.include.push({
                         model: SequelizeUserModel,
                         as: "User"
                     });
-
-                    options.attributes = {
-                        include: [
-                            [
-                                Sequelize.literal(`(
-                                    SELECT COUNT(*) 
-                                    FROM file_folders ff 
-                                    WHERE ff.FileId = File.id
-                                )`), "filesCount"
-                            ]
-                        ]
-                    };
                 },
             }
         }

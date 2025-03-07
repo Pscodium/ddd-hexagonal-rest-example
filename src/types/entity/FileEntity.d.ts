@@ -7,5 +7,6 @@ export interface IFileEntity {
     updatedAt?: Date | number;
     private: boolean;
     UserId: string;
+    FolderId?: string;
     Folder?: Folder[];
 }
