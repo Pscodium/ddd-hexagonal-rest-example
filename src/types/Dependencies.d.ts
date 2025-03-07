@@ -12,12 +12,17 @@ import { SequelizeUserModel } from '@/infra/orm/sequelize/models/SequelizeUserMo
 import { PermissionRequestService } from '@/interface/http/services/PermissionRequestService';
 import { SequelizePermissionRepository } from '@/infra/orm/sequelize/repositories/SequelizePermissionRepository';
 import { SequelizePermissionModel } from '@/infra/orm/sequelize/models/SequelizePermissionModel';
+import { SequelizeFileModel } from '@/infra/orm/sequelize/models/SequelizeFileModel';
+import { SequelizeFileRepository } from '@/infra/orm/sequelize/repositories/SequelizeFileRepository';
+import { SequelizeFolderRepository } from '@/infra/orm/sequelize/repositories/SequelizeFolderRepository';
 
 // domain
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
 import { ILogsRepository } from '@/domain/repositories/elastic/ILogsRepository';
 import { ISessionRepository } from '@/domain/repositories/ISessionRepository';
 import { IPermissionRepository } from '@/domain/repositories/IPermissionRepository';
+import { IFileRepository } from '@/domain/repositories/IFileRepository';
+import { IFolderRepository } from '@/domain/repositories/IFolderRepository';
 import { Permission } from '@/domain/entities/Permission';
 import { Session } from '@/domain/entities/Session';
 import { User } from '@/domain/entities/User';
@@ -34,12 +39,20 @@ import { UnexpiredLoginUseCase } from '@/app/useCases/user/UnexpiredLoginUseCase
 import { DeleteUserUseCase } from '@/app/useCases/user/DeleteUserUseCase';
 import { UpdatePermissionUseCase } from '@/app/useCases/permission/UpdatePermissionUseCase';
 import { UpdateUserUseCase } from '@/app/useCases/user/UpdateUserUseCase';
+import { CreateFileUseCase } from '@/app/useCases/storage/CreateFIleUseCase';
+import { CreateFolderUseCase } from '@/app/useCases/storage/CreateFolderUseCase';
+import { DeleteFileUseCase } from '@/app/useCases/storage/DeleteFileUseCase';
+import { DeleteFolderUseCase } from '@/app/useCases/storage/DeleteFolderUseCase';
+import { FindAllFileUseCase } from '@/app/useCases/storage/FindAllFileUseCase';
+import { FindAllFolderUseCase } from '@/app/useCases/storage/FindAllFolderUseCase';
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from '@/interface/http/controllers/LogsController';
 import { AuthorizationRequestService } from '@/interface/http/services/AuthorizationRequestService';
 import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentication';
+import { StorageController } from '@/interface/http/controllers/StorageController';
+import { StorageRoutes } from '@/interface/http/routes/StorageRoutes';
 
 
 // Shared
@@ -51,7 +64,7 @@ import { EnumsType } from '@/types/Enums';
 
 
 // Default Imports
-import { ModelStatic } from 'sequelize';
+import { ModelStatic, Sequelize } from 'sequelize';
 import { S3 } from 'aws-sdk';
 import SchemaMiddleware from '@/interface/http/middlewares/SchemaMiddleware';
 
@@ -64,10 +77,14 @@ export default interface Dependencies {
             sequelizeSessionModel: ModelStatic<SequelizeSessionModel>;
             sequelizeUserModel: ModelStatic<SequelizeUserModel>;
             sequelizePermissionModel: ModelStatic<SequelizePermissionModel>;
+            sequelizeFileModel: ModelStatic<SequelizeFileModel>;
+            sequelizeFolderModel: ModelStatic<SequelizeFileModel>;
             /* Repository */
             sequelizeUserRepository: SequelizeUserRepository;
             sequelizeSessionRepository: SequelizeSessionRepository;
             sequelizePermissionRepository: SequelizePermissionRepository;
+            sequelizeFileRepository: SequelizeFileRepository;
+            sequelizeFolderRepository: SequelizeFolderRepository;
         /* Integration */
             /* ElasticSearch */
             elasticSearchClient: ElasticSearchClient;
@@ -89,6 +106,8 @@ export default interface Dependencies {
         logsRepository: ILogsRepository;
         storageRepository: IStorageRepository;
         sessionRepository: ISessionRepository;
+        fileRepository: IFileRepository;
+        folderRepository: IFolderRepository;
 
     /* APP - */
         /* Use Cases*/
@@ -100,6 +119,13 @@ export default interface Dependencies {
             unexpiredLoginUseCase: UnexpiredLoginUseCase;
             deleteUserUseCase: DeleteUserUseCase;
             updateUserUseCase: UpdateUserUseCase;
+            /* Storage */
+            createFileUseCase: CreateFileUseCase;
+            createFolderUseCase: CreateFolderUseCase;
+            deleteFileUseCase: DeleteFileUseCase;
+            deleteFolderUseCase: DeleteFolderUseCase;
+            findAllFileUseCase: FindAllFileUseCase;
+            findAllFolderUseCase: FindAllFolderUseCase;
             /* Permission */
             updatePermissionUseCase: UpdatePermissionUseCase;
             /* Log */
@@ -113,9 +139,11 @@ export default interface Dependencies {
             /* Controller */
             userController: UserController;
             logsController: LogsController;
+            storageController: StorageController;
             /* Routes */
             userRoutes: UserRoutes;
             logRoutes: LogRoutes;
+            storageRoutes: StorageRoutes
             /* Services */
             authorizationRequestService: AuthorizationRequestService;
             permissionRequestService: PermissionRequestService;
@@ -134,6 +162,7 @@ export default interface Dependencies {
         regex: RegexType;
         /* Types */
         storageType: S3
+        sequelize: Sequelize
 
 // eslint-disable-next-line semi
 };

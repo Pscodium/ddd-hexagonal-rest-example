@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
+import { SequelizeFolderModel } from './SequelizeFolderModel';
+import { SequelizeUserModel } from './SequelizeUserModel';
 
 export class SequelizeFileModel extends Model {
     public id!: string;
@@ -9,9 +11,12 @@ export class SequelizeFileModel extends Model {
     public url!: string;
     public type!: string;
     public private!: boolean;
+    public UserId!: string;
+    public FolderId!: string;
 
     public static associate(models: any) {
         this.belongsTo(models.User, {
+            as: "User",
             foreignKey: 'UserId',
             onDelete: 'CASCADE'
         });
@@ -53,7 +58,40 @@ export const initSequelizeFileModel = (sequelize: Sequelize) => {
         },
         {
             sequelize: sequelize,
-            tableName: 'file',
+            tableName: 'file'
         }
     );
+
+    SequelizeFileModel.addHook("beforeDestroy", async (file, options) => {
+        const folders = await (file as any).getFolders();
+        
+        for (const folder of folders) {
+            await (folder as any).removeFile(file, { transaction: options.transaction });
+        }
+    });
+
+    SequelizeFileModel.addHook("beforeFind", (options) => {
+        
+        if (!Array.isArray(options.include)) {
+            options.include = [];
+        }
+        
+        
+        if (!options.include.some((inc: any) => inc.model === SequelizeFolderModel)) {
+            options.include.push({
+                model: SequelizeFolderModel,
+                as: "Folder",
+                through: {
+                    attributes: []
+                }, 
+            });
+        }
+        
+        if (!options.include.some((inc: any) => inc.model === SequelizeUserModel)) {
+            options.include.push({
+                model: SequelizeUserModel,
+                as: "User"
+            });
+        }
+    });
 };
