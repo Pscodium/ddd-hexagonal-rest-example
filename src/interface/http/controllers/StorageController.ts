@@ -71,7 +71,7 @@ export class StorageController implements IStorageController {
                 name: file.originalname,
                 url: fileUrl,
                 UserId: req.userId,
-                folderId,
+                FolderId: folderId,
                 type
             });
 
@@ -137,7 +137,7 @@ export class StorageController implements IStorageController {
         const callName = `${this.constructor.name}.deleteFile()`;
         try {
             const { id, folderId } = req.params;
-            
+
             const file = await this.fileRepository.findOne(id);
             const folder = await this.folderRepository.findOne(folderId);
 
@@ -180,7 +180,7 @@ export class StorageController implements IStorageController {
                 this.logger.error(`[REQUEST ERROR] - Folder not found`);
                 throw new AppError('Folder not found', 404);
             }
-            
+
             await this.deleteFolderUseCase.execute(id);
 
             await this.storageRepository.deleteFolder(`${folder.name}/`);
@@ -261,7 +261,7 @@ export class StorageController implements IStorageController {
             if (!url) {
                 return res.status(400).send('URL Needed');
             }
-            
+
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -276,7 +276,7 @@ export class StorageController implements IStorageController {
             const data = await response.text();
             const contentType = response.headers.get('content-type');
             if (!contentType) {
-                return res.status(500).json({ message: 'Unexpected error on get proxy content type'});
+                return res.status(500).json({ message: 'Unexpected error on get proxy content type' });
             }
             res.set('Content-Type', contentType);
 

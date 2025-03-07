@@ -10,9 +10,10 @@ export class File implements IFileEntity {
     createdAt!: Date | number | undefined;
     updatedAt!: Date | number | undefined;
     UserId!: string;
+    FolderId!: string | undefined;
     Folder!: Folder[] | undefined;
 
-    constructor({ id, name, type, url, UserId, private: isPrivate, Folder, createdAt, updatedAt }: IFileEntity) {
+    constructor({ id, name, type, url, UserId, private: isPrivate, Folder, createdAt, updatedAt, FolderId }: IFileEntity) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -22,6 +23,7 @@ export class File implements IFileEntity {
         this.Folder = Folder;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.FolderId = FolderId;
     }
   
 }

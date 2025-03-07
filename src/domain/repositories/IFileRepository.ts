@@ -5,5 +5,6 @@ export interface IFileRepository {
     findOne(fileId: string): Promise<File | null>
     associateWithFolder(fileId: string, folderId: string): Promise<void>;
     findAll(): Promise<File[]>;
-    delete(fileId: string, folderId: string): Promise<void>;
+    delete(fileId: string): Promise<void>;
+    hasFileOnFolder(folderId: string, fileId: string): Promise<boolean>;
 };

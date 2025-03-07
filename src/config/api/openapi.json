@@ -2010,14 +2010,7 @@
               "Folder": {
                 "allOf": [
                   {
-                    "type": "array",
-                    "items": {
-                      "oneOf": [
-                        {
-                          "$ref": "#/components/schemas/FolderSchema"
-                        }
-                      ]
-                    }
+                    "$ref": "#/components/schemas/FolderSchema"
                   }
                 ]
               }
