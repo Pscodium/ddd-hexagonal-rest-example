@@ -12,7 +12,6 @@ export class UpdateUserUseCase {
 
     async execute(data: UpdateUserDTO): Promise<number> {
         const userExists = await this.userRepository.findById(data.id);
-        console.log('entra aqui no use case ', data);
 
         if (!userExists || !userExists.id) {
             this.logger.error('User not found');

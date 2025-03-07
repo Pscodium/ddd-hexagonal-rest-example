@@ -16,6 +16,7 @@ export class App {
     private elasticSearchClient: Dependencies['elasticSearchClient'];
     private userRoutes: Dependencies['userRoutes'];
     private logRoutes: Dependencies['logRoutes'];
+    private storageRoutes: Dependencies['storageRoutes'];
     private allowedOrigins: IAllowedOrigins;
     private options: IOptions;
 
@@ -23,13 +24,14 @@ export class App {
     private logger: Dependencies['logger'];
     
 
-    constructor({ environment, sequelizeAdapter, logger, elasticSearchClient, userRoutes, logRoutes }: Pick<Dependencies, 'environment' | 'sequelizeAdapter' | 'logger' | 'elasticSearchClient' | 'userRoutes' | 'logRoutes'>) {
+    constructor({ environment, sequelizeAdapter, logger, elasticSearchClient, userRoutes, logRoutes, storageRoutes }: Pick<Dependencies, 'environment' | 'sequelizeAdapter' | 'logger' | 'elasticSearchClient' | 'userRoutes' | 'logRoutes' | 'storageRoutes'>) {
         this.enrivonment = environment;
         this.sequelizeAdapter = sequelizeAdapter;
         this.logger = logger;
         this.elasticSearchClient = elasticSearchClient;
         this.userRoutes = userRoutes;
         this.logRoutes = logRoutes;
+        this.storageRoutes = storageRoutes;
         this.app = express();
 
         this.allowedOrigins = [environment.frontend_origin, environment.electron_origin];
@@ -54,7 +56,7 @@ export class App {
         this.app.use(cors(this.options));
         this.app.use('/api-docs', swaggerUi.serve);
         this.app.get('/api-docs', swaggerUi.setup(docs));
-        this.app.use('/api', [this.userRoutes.init(), this.logRoutes.init()]);
+        this.app.use('/api', [this.userRoutes.init(), this.logRoutes.init(), this.storageRoutes.init()]);
         this.app.listen(this.enrivonment.port, () => console.log(`Server running on port ${this.enrivonment.port}`));
     }
 

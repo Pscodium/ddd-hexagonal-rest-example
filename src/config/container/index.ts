@@ -14,6 +14,10 @@ import { Logger } from "@/infra/integration/elasticSearch/logger";
 import { SequelizeSessionModel } from "@/infra/orm/sequelize/models/SequelizeSessionModel";
 import { SequelizeUserModel } from "@/infra/orm/sequelize/models/SequelizeUserModel";
 import { SequelizePermissionModel } from "@/infra/orm/sequelize/models/SequelizePermissionModel";
+import { SequelizeFileModel } from "@/infra/orm/sequelize/models/SequelizeFileModel";
+import { SequelizeFolderModel } from "@/infra/orm/sequelize/models/SequelizeFolderModel";
+import { SequelizeFileRepository } from "@/infra/orm/sequelize/repositories/SequelizeFileRepository";
+import { SequelizeFolderRepository } from "@/infra/orm/sequelize/repositories/SequelizeFolderRepository";
 
 // domain
 import { User } from '@/domain/entities/User';
@@ -32,6 +36,12 @@ import { GetLogsFormattedUseCase } from "@/app/useCases/log/GetLogsFormattedUseC
 import { DeleteUserUseCase } from "@/app/useCases/user/DeleteUserUseCase";
 import { UpdatePermissionUseCase } from "@/app/useCases/permission/UpdatePermissionUseCase";
 import { UpdateUserUseCase } from "@/app/useCases/user/UpdateUserUseCase";
+import { CreateFileUseCase } from "@/app/useCases/storage/CreateFIleUseCase";
+import { CreateFolderUseCase } from "@/app/useCases/storage/CreateFolderUseCase";
+import { DeleteFileUseCase } from "@/app/useCases/storage/DeleteFileUseCase";
+import { DeleteFolderUseCase } from "@/app/useCases/storage/DeleteFolderUseCase";
+import { FindAllFileUseCase } from "@/app/useCases/storage/FindAllFileUseCase";
+import { FindAllFolderUseCase } from "@/app/useCases/storage/FindAllFolderUseCase";
 
 // interface
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
@@ -41,6 +51,8 @@ import { LogsController } from "@/interface/http/controllers/LogsController";
 import { PermissionRequestService } from "@/interface/http/services/PermissionRequestService";
 import { AuthorizationRequestService } from "@/interface/http/services/AuthorizationRequestService";
 import { AuthenticationMiddleware } from "@/interface/http/middlewares/Authentication";
+import { StorageController } from "@/interface/http/controllers/StorageController";
+import { StorageRoutes } from "@/interface/http/routes/StorageRoutes";
 
 // config
 import { environment } from "../Environment";
@@ -69,6 +81,13 @@ container.register({
     /* Logs -- */
     getLogsUseCase: asClass(GetLogsUseCase).singleton(),
     getLogsFormattedUseCase: asClass(GetLogsFormattedUseCase).singleton(),
+    /* Storage -- */
+    createFileUseCase: asClass(CreateFileUseCase).singleton(),
+    createFolderUseCase: asClass(CreateFolderUseCase).singleton(),
+    deleteFileUseCase: asClass(DeleteFileUseCase).singleton(),
+    deleteFolderUseCase: asClass(DeleteFolderUseCase).singleton(),
+    findAllFileUseCase: asClass(FindAllFileUseCase).singleton(),
+    findAllFolderUseCase: asClass(FindAllFolderUseCase).singleton(),
     /* Services - */
     passwordValidator: asClass(PasswordValidator).singleton(),
 
@@ -81,13 +100,13 @@ container.register({
     /* INFRA */
     /* Adapter - */
     sequelizeAdapter: asClass(SequelizeAdapter).singleton(),
-    /* Integration -- */
-    /* ElasticSearch - */
+    /* Integration - */
+    /* ElasticSearch -- */
     elasticSearchClient: asClass(ElasticSearchClient).singleton(),
     logger: asClass(Logger).singleton(),
-    /* Storage */
+    /* Storage -- */
     storageClient: asClass(StorageS3Client).singleton(),
-    /* Repository -- */
+    /* Repository --- */
     logsRepository: asClass(ElasticSearchLogsRepository).singleton(),
     storageRepository: asClass(StorageRepository).singleton(),
     /* Orm -*/
@@ -95,20 +114,26 @@ container.register({
     sequelizeSessionModel: asClass(SequelizeSessionModel).singleton(),
     sequelizeUserModel: asClass(SequelizeUserModel).singleton(),
     sequelizePermissionModel: asClass(SequelizePermissionModel).singleton(),
+    sequelizeFileModel: asClass(SequelizeFileModel).singleton(),
+    sequelizeFolderModel: asClass(SequelizeFolderModel).singleton(),
     
     /* Repository - */
     userRepository: asClass(SequelizeUserRepository).singleton(),
     sessionRepository: asClass(SequelizeSessionRepository).singleton(),
     permissionRepository: asClass(SequelizePermissionRepository).singleton(),
+    fileRepository: asClass(SequelizeFileRepository).singleton(),
+    folderRepository: asClass(SequelizeFolderRepository).singleton(),
 
     /* INTERFACE */
     /* HTTP */
     /* Controller - */
     userController: asClass(UserController).singleton(),
     logsController: asClass(LogsController).singleton(),
+    storageController: asClass(StorageController).singleton(),
     /* Routes - */
     userRoutes: asClass(UserRoutes).singleton(),
     logRoutes: asClass(LogRoutes).singleton(),
+    storageRoutes: asClass(StorageRoutes).singleton(),
     /* Services - */
     authorizationRequestService: asClass(AuthorizationRequestService).singleton(),
     permissionRequestService: asClass(PermissionRequestService).singleton(),
