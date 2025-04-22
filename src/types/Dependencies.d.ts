@@ -64,6 +64,8 @@ import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentic
 import { StorageController } from '@/interface/http/controllers/StorageController';
 import { StorageRoutes } from '@/interface/http/routes/StorageRoutes';
 import { ArticleRoutes } from '@/interface/http/routes/ArticleRoutes';
+import { UserRoutes } from '@/interface/http/routes/UserRoutes';
+import { LogRoutes } from '@/interface/http/routes/LogRoutes';
 import { ArticleController } from '@/interface/http/controllers/ArticleController';
 import SchemaMiddleware from '@/interface/http/middlewares/SchemaMiddleware';
 
