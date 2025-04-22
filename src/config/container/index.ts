@@ -1,4 +1,4 @@
-import { createContainer, asClass, asValue, InjectionMode } from "awilix";
+import { createContainer, asClass, asValue, InjectionMode, Lifetime } from "awilix";
 import { App } from "../Application";
 
 // infra
@@ -18,11 +18,17 @@ import { SequelizeFileModel } from "@/infra/orm/sequelize/models/SequelizeFileMo
 import { SequelizeFolderModel } from "@/infra/orm/sequelize/models/SequelizeFolderModel";
 import { SequelizeFileRepository } from "@/infra/orm/sequelize/repositories/SequelizeFileRepository";
 import { SequelizeFolderRepository } from "@/infra/orm/sequelize/repositories/SequelizeFolderRepository";
+import { SequelizeArticleModel } from "@/infra/orm/sequelize/models/SequelizeArticleModel";
+import { SequelizeTagModel } from "@/infra/orm/sequelize/models/SequelizeTagModel";
+import { SequelizeArticleRepository } from "@/infra/orm/sequelize/repositories/SequelizeArticleRepository";
+import { SequelizeTagRepository } from "@/infra/orm/sequelize/repositories/SequelizeTagRepository";
 
 // domain
 import { User } from '@/domain/entities/User';
 import { Session } from "@/domain/entities/Session";
 import { Permission } from "@/domain/entities/Permission";
+import { Article } from "@/domain/entities/Article";
+import { Tag } from "@/domain/entities/Tag";
 import { PasswordValidator } from "@/app/services/user/PasswordValidator";
 
 // app
@@ -42,6 +48,13 @@ import { DeleteFileUseCase } from "@/app/useCases/storage/DeleteFileUseCase";
 import { DeleteFolderUseCase } from "@/app/useCases/storage/DeleteFolderUseCase";
 import { FindAllFileUseCase } from "@/app/useCases/storage/FindAllFileUseCase";
 import { FindAllFolderUseCase } from "@/app/useCases/storage/FindAllFolderUseCase";
+import { CreateArticleUseCase } from "@/app/useCases/article/CreateArticleUseCase";
+import { FindAllArticlesUseCase } from "@/app/useCases/article/FindAllArticlesUseCase";
+import { FindAllTagsUseCase } from "@/app/useCases/article/FindAllTagsUseCase";
+import { FindArticlesByTagIdUseCase } from "@/app/useCases/article/FindArticlesByTagIdUseCase";
+import { UpdateArticleUseCase } from "@/app/useCases/article/UpdateArticleUseCase";
+import { DeleteArticleUseCase } from "@/app/useCases/article/DeleteArticleUseCase";
+import { DeleteTagUseCase } from "@/app/useCases/article/DeleteTagUseCase";
 
 // interface
 import { UserRoutes } from "@/interface/http/routes/UserRoutes";
@@ -53,6 +66,8 @@ import { AuthorizationRequestService } from "@/interface/http/services/Authoriza
 import { AuthenticationMiddleware } from "@/interface/http/middlewares/Authentication";
 import { StorageController } from "@/interface/http/controllers/StorageController";
 import { StorageRoutes } from "@/interface/http/routes/StorageRoutes";
+import { ArticleController } from "@/interface/http/controllers/ArticleController";
+import { ArticleRoutes } from "@/interface/http/routes/ArticleRoutes";
 
 // config
 import { environment } from "../Environment";
@@ -69,6 +84,14 @@ const container = createContainer({
 container.register({
     /* APP */
     /* Use Cases - */
+    /* Article -- */
+    createArticleUseCase: asClass(CreateArticleUseCase).singleton(),
+    findAllArticlesUseCase: asClass(FindAllArticlesUseCase).singleton(),
+    findAllTagsUseCase: asClass(FindAllTagsUseCase).singleton(),
+    findArticlesByTagIdUseCase: asClass(FindArticlesByTagIdUseCase).singleton(),
+    updateArticleUseCase: asClass(UpdateArticleUseCase).singleton(),
+    deleteArticleUseCase: asClass(DeleteArticleUseCase).singleton(),
+    deleteTagUseCase: asClass(DeleteTagUseCase).singleton(),
     /* User -- */
     createUserUseCase: asClass(CreateUserUseCase).singleton(),
     findOneUserUseCase: asClass(FindOneUserUseCase).singleton(),
@@ -96,6 +119,8 @@ container.register({
     user: asClass(User).singleton(),
     session: asClass(Session).singleton(),
     permission: asClass(Permission).singleton(),
+    article: asClass(Article).singleton(),
+    tag: asClass(Tag).singleton(),
 
     /* INFRA */
     /* Adapter - */
@@ -116,6 +141,8 @@ container.register({
     sequelizePermissionModel: asClass(SequelizePermissionModel).singleton(),
     sequelizeFileModel: asClass(SequelizeFileModel).singleton(),
     sequelizeFolderModel: asClass(SequelizeFolderModel).singleton(),
+    sequelizeArticleModel: asClass(SequelizeArticleModel).singleton(),
+    sequelizeTagModel: asClass(SequelizeTagModel).singleton(),
     
     /* Repository - */
     userRepository: asClass(SequelizeUserRepository).singleton(),
@@ -123,6 +150,8 @@ container.register({
     permissionRepository: asClass(SequelizePermissionRepository).singleton(),
     fileRepository: asClass(SequelizeFileRepository).singleton(),
     folderRepository: asClass(SequelizeFolderRepository).singleton(),
+    articleRepository: asClass(SequelizeArticleRepository).singleton(),
+    tagRepository: asClass(SequelizeTagRepository).singleton(),
 
     /* INTERFACE */
     /* HTTP */
@@ -130,10 +159,12 @@ container.register({
     userController: asClass(UserController).singleton(),
     logsController: asClass(LogsController).singleton(),
     storageController: asClass(StorageController).singleton(),
+    articleController: asClass(ArticleController).singleton(),
     /* Routes - */
     userRoutes: asClass(UserRoutes).singleton(),
     logRoutes: asClass(LogRoutes).singleton(),
     storageRoutes: asClass(StorageRoutes).singleton(),
+    articleRoutes: asClass(ArticleRoutes).singleton(),
     /* Services - */
     authorizationRequestService: asClass(AuthorizationRequestService).singleton(),
     permissionRequestService: asClass(PermissionRequestService).singleton(),
@@ -152,26 +183,30 @@ container.register({
     regex: asValue(regex)
 }).loadModules(
     [
-        '../../app/dto/**/*(*.ts)',
-        '../../app/useCases/**/*(*.ts)',
-        '../../app/services/**/*(*.ts)',
-        '../../config/**/*(*.ts)',
-        '../../config/*(*.ts)',
-        '../../domain/**/*(*.ts)',
-        '../../infra/orm/**/*(*.ts)',
-        '../../infra/**/*(*.ts)',
-        '../../interface/http/**/*(*.ts)',
-        '../../shared/**/*(*.ts)'
+        '../../app/useCases/**/*(*.js|*.ts)',
+        '../../app/services/**/*(*.js|*.ts)',
+        '../../config/**/*(*.js|*.ts)',
+        '../../config/*(*.js|*.ts)',
+        '../../domain/**/*(*.js|*.ts)',
+        '../../infra/orm/**/*(*.js|*.ts)',
+        '../../infra/**/*(*.js|*.ts)',
+        '../../interface/http/**/*(*.js|*.ts)',
+        '../../shared/**/*(*.js|*.ts)'
     ], {
         cwd: __dirname,
         formatName: 'camelCase',
         resolverOptions: {
-            injectionMode: InjectionMode.PROXY
+            injectionMode: InjectionMode.PROXY,
+            register: asClass,
+            lifetime: Lifetime.SINGLETON,
+            dispose: (obj) => obj.dispose && obj.dispose()
         }
     }
 );
 
 // Inicializa a aplicação diretamente no contêiner
 container.resolve<App>("app").start();
+
+console.log('Dependencias Registradas: ', Object.keys(container.registrations).length);
 
 export default container;
