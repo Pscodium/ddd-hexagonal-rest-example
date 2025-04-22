@@ -42,7 +42,7 @@ import { UnexpiredLoginUseCase } from '@/app/useCases/user/UnexpiredLoginUseCase
 import { DeleteUserUseCase } from '@/app/useCases/user/DeleteUserUseCase';
 import { UpdatePermissionUseCase } from '@/app/useCases/permission/UpdatePermissionUseCase';
 import { UpdateUserUseCase } from '@/app/useCases/user/UpdateUserUseCase';
-import { CreateFileUseCase } from '@/app/useCases/storage/CreateFIleUseCase';
+import { CreateFileUseCase } from '@/app/useCases/storage/CreateFileUseCase';
 import { CreateFolderUseCase } from '@/app/useCases/storage/CreateFolderUseCase';
 import { DeleteFileUseCase } from '@/app/useCases/storage/DeleteFileUseCase';
 import { DeleteFolderUseCase } from '@/app/useCases/storage/DeleteFolderUseCase';
@@ -60,7 +60,7 @@ import { DeleteTagUseCase } from '@/app/useCases/article/DeleteTagUseCase';
 import { UserController } from '@/interface/http/controllers/UserController';
 import { LogsController } from '@/interface/http/controllers/LogsController';
 import { AuthorizationRequestService } from '@/interface/http/services/AuthorizationRequestService';
-import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentication';
+import { AuthenticationMiddleware } from '@/interface/http/middlewares/AuthenticationMiddleware';
 import { StorageController } from '@/interface/http/controllers/StorageController';
 import { StorageRoutes } from '@/interface/http/routes/StorageRoutes';
 import { ArticleRoutes } from '@/interface/http/routes/ArticleRoutes';
