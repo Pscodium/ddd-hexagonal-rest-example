@@ -15,6 +15,7 @@ import { SequelizePermissionModel } from '@/infra/orm/sequelize/models/Sequelize
 import { SequelizeFileModel } from '@/infra/orm/sequelize/models/SequelizeFileModel';
 import { SequelizeFileRepository } from '@/infra/orm/sequelize/repositories/SequelizeFileRepository';
 import { SequelizeFolderRepository } from '@/infra/orm/sequelize/repositories/SequelizeFolderRepository';
+import { SequelizeArticleModel } from '@/infra/orm/sequelize/models/SequelizeArticleModel';
 
 // domain
 import { IUserRepository } from '@/domain/repositories/IUserRepository';
@@ -23,6 +24,8 @@ import { ISessionRepository } from '@/domain/repositories/ISessionRepository';
 import { IPermissionRepository } from '@/domain/repositories/IPermissionRepository';
 import { IFileRepository } from '@/domain/repositories/IFileRepository';
 import { IFolderRepository } from '@/domain/repositories/IFolderRepository';
+import { IArticleRepository } from '@/domain/repositories/IArticleRepository';
+import { ITagRepository } from '@/domain/repositories/ITagRepository';
 import { Permission } from '@/domain/entities/Permission';
 import { Session } from '@/domain/entities/Session';
 import { User } from '@/domain/entities/User';
@@ -45,6 +48,13 @@ import { DeleteFileUseCase } from '@/app/useCases/storage/DeleteFileUseCase';
 import { DeleteFolderUseCase } from '@/app/useCases/storage/DeleteFolderUseCase';
 import { FindAllFileUseCase } from '@/app/useCases/storage/FindAllFileUseCase';
 import { FindAllFolderUseCase } from '@/app/useCases/storage/FindAllFolderUseCase';
+import { CreateArticleUseCase } from '@/app/useCases/article/CreateArticleUseCase';
+import { FindAllArticlesUseCase } from '@/app/useCases/article/FindAllArticlesUseCase';
+import { FindAllTagsUseCase } from '@/app/useCases/article/FindAllTagsUseCase';
+import { FindArticlesByTagIdUseCase } from '@/app/useCases/article/FindArticlesByTagIdUseCase';
+import { UpdateArticleUseCase } from '@/app/useCases/article/UpdateArticleUseCase';
+import { DeleteArticleUseCase } from '@/app/useCases/article/DeleteArticleUseCase';
+import { DeleteTagUseCase } from '@/app/useCases/article/DeleteTagUseCase';
 
 // interface
 import { UserController } from '@/interface/http/controllers/UserController';
@@ -53,7 +63,9 @@ import { AuthorizationRequestService } from '@/interface/http/services/Authoriza
 import { AuthenticationMiddleware } from '@/interface/http/middlewares/Authentication';
 import { StorageController } from '@/interface/http/controllers/StorageController';
 import { StorageRoutes } from '@/interface/http/routes/StorageRoutes';
-
+import { ArticleRoutes } from '@/interface/http/routes/ArticleRoutes';
+import { ArticleController } from '@/interface/http/controllers/ArticleController';
+import SchemaMiddleware from '@/interface/http/middlewares/SchemaMiddleware';
 
 // Shared
 import { RegexType } from '@/shared/utils/Regex';
@@ -66,7 +78,6 @@ import { EnumsType } from '@/types/Enums';
 // Default Imports
 import { ModelStatic, Sequelize } from 'sequelize';
 import { S3 } from 'aws-sdk';
-import SchemaMiddleware from '@/interface/http/middlewares/SchemaMiddleware';
 
 export default interface Dependencies {
     /* INFRA - */
@@ -79,12 +90,14 @@ export default interface Dependencies {
             sequelizePermissionModel: ModelStatic<SequelizePermissionModel>;
             sequelizeFileModel: ModelStatic<SequelizeFileModel>;
             sequelizeFolderModel: ModelStatic<SequelizeFileModel>;
+            sequilizeArticleModel: ModelStatic<SequelizeArticleModel>
             /* Repository */
             sequelizeUserRepository: SequelizeUserRepository;
             sequelizeSessionRepository: SequelizeSessionRepository;
             sequelizePermissionRepository: SequelizePermissionRepository;
             sequelizeFileRepository: SequelizeFileRepository;
             sequelizeFolderRepository: SequelizeFolderRepository;
+
         /* Integration */
             /* ElasticSearch */
             elasticSearchClient: ElasticSearchClient;
@@ -108,9 +121,19 @@ export default interface Dependencies {
         sessionRepository: ISessionRepository;
         fileRepository: IFileRepository;
         folderRepository: IFolderRepository;
+        articleRepository: IArticleRepository;
+        tagRepository: ITagRepository;
 
     /* APP - */
         /* Use Cases*/
+            /* Article */
+            createArticleUseCase: CreateArticleUseCase;
+            findAllArticlesUseCase: FindAllArticlesUseCase;
+            findAllTagsUseCase: FindAllTagsUseCase;
+            findArticlesByTagIdUseCase: FindArticlesByTagIdUseCase;
+            updateArticleUseCase: UpdateArticleUseCase;
+            deleteArticleUseCase: DeleteArticleUseCase;
+            deleteTagUseCase: DeleteTagUseCase;
             /* User */
             createUserUseCase: CreateUserUseCase;
             findOneUserUseCase: FindOneUserUseCase;
@@ -140,10 +163,12 @@ export default interface Dependencies {
             userController: UserController;
             logsController: LogsController;
             storageController: StorageController;
+            articleController: ArticleController;
             /* Routes */
             userRoutes: UserRoutes;
             logRoutes: LogRoutes;
-            storageRoutes: StorageRoutes
+            storageRoutes: StorageRoutes;
+            articleRoutes: ArticleRoutes;
             /* Services */
             authorizationRequestService: AuthorizationRequestService;
             permissionRequestService: PermissionRequestService;

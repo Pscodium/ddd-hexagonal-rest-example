@@ -29,6 +29,10 @@
       "description": "User Permissions"
     },
     {
+      "name": "articles",
+      "description": "User Articles"
+    },
+    {
       "name": "storage",
       "description": "User File Storage"
     }
@@ -140,54 +144,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[ERROR](400) - Invalid password pattern."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[ERROR](409) - User already exists."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -227,54 +183,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -297,54 +205,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CheckAuthResponseSchema"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
                 }
               }
             }
@@ -378,38 +238,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "Unexpected error on delete session."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -432,54 +260,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CheckAuthResponseSchema"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
                 }
               }
             }
@@ -518,54 +298,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -599,70 +331,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserResponseSchema"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](404) - User does not exist (Invalid ID)."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
                 }
               }
             }
@@ -706,86 +374,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[REQUEST ERROR] - Missing required route parameter 'id'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](404) - The user you are trying to delete does not exist."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -820,70 +408,6 @@
                   "properties": {
                     "success": {
                       "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
                     }
                   }
                 }
@@ -934,75 +458,6 @@
                   "properties": {
                     "success": {
                       "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "missingId": {
-                    "summary": "Missing ID parameter",
-                    "value": {
-                      "message": "[REQUEST ERROR] - Missing required route parameter 'id'"
-                    }
-                  },
-                  "invalidData": {
-                    "summary": "Invalid data",
-                    "value": {
-                      "message": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
                     }
                   }
                 }
@@ -1059,75 +514,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "missingId": {
-                    "summary": "Missing Folder ID parameter",
-                    "value": {
-                      "message": "[REQUEST ERROR] - Missing required route parameter 'folderId'"
-                    }
-                  },
-                  "invalidData": {
-                    "summary": "Invalid data",
-                    "value": {
-                      "message": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -1170,69 +556,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "invalidData": {
-                    "summary": "Invalid data",
-                    "value": {
-                      "message": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -1265,69 +588,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "invalidData": {
-                    "summary": "Invalid data",
-                    "value": {
-                      "message": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -1356,69 +616,6 @@
                         "$ref": "#/components/schemas/FoldersResponseSchema"
                       }
                     ]
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "invalidData": {
-                    "summary": "Invalid data",
-                    "value": {
-                      "message": "Invalid data"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
                   }
                 }
               }
@@ -1474,86 +671,6 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[REQUEST ERROR] - Missing required route parameter 'id' or 'folderId'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](404) - The user you are trying to delete does not exist."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -1596,81 +713,269 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Bad Request",
+          }
+        }
+      }
+    },
+    "/article/create": {
+      "post": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Create a article",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticlesRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Folder successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticlesResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Get all tags",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/TagsResponseSchema"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Get all articles",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/ArticlesResponseSchema"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/articles/tag/{id}": {
+      "get": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Find all articles by tag ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Tag Id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      { "$ref": "#/components/schemas/ArticlesResponseSchema" }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/article/update/{id}": {
+      "put": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Update article",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Article Id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArticlesRequestSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticlesResponseSchema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tag/delete/{id}": {
+      "delete": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Delete a tag",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Tag Id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[REQUEST ERROR] - Missing required route parameter 'id' or 'folderId'"
+                    "success": {
+                      "type": "boolean",
+                      "example": true
                     }
                   }
                 }
               }
             }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](401) - You need to provides a authorization token."
-                    }
-                  }
-                }
-              }
+          }
+        }
+      }
+    },
+    "/article/delete/{id}": {
+      "delete": {
+        "tags": [
+          "articles"
+        ],
+        "summary": "Delete a article",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Article Id",
+            "schema": {
+              "type": "string"
             }
-          },
-          "403": {
-            "description": "Forbidden",
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](403) - You don't have permissions for use this route."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "default": "[ERROR](404) - The user you are trying to delete does not exist."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "stack": {
-                      "type": "string",
-                      "default": "[AUTHORIZATION REQUEST ERROR] - Bad Request"
+                    "success": {
+                      "type": "boolean",
+                      "example": true
                     }
                   }
                 }
@@ -1848,6 +1153,63 @@
           }
         }
       },
+      "ArticleSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "UserId": {
+            "type": "string"
+          },
+          "files": {
+            "type": "number",
+            "example": null
+          },
+          "private": {
+            "type": "boolean",
+            "example": null
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "TagSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "hex": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          },
+          "views": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
       "RegisterResponseSchema": {
         "allOf": [
           {
@@ -2011,6 +1373,85 @@
                 "allOf": [
                   {
                     "$ref": "#/components/schemas/FolderSchema"
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ArticlesResponseSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ArticleSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "Tags": {
+                "allOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/TagSchema"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ArticlesRequestSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "TagsResponseSchema": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/TagSchema"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "articlesCount": {
+                "type": "number"
+              },
+              "Articles": {
+                "allOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/ArticleSchema"
+                        }
+                      ]
+                    }
                   }
                 ]
               }
