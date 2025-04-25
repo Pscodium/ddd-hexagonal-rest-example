@@ -20,7 +20,7 @@ export class SequelizeFolderModel extends Model {
             foreignKey: 'UserId',
             onDelete: 'CASCADE'
         });
-        this.hasMany(models.File, { as: 'File', foreignKey: 'FolderId' });
+        this.hasMany(models.File, { as: 'Files', foreignKey: 'FolderId' });
     }
 }
 
@@ -54,7 +54,7 @@ export const initSequelizeFolderModel = (sequelize: Sequelize) => {
             tableName: 'folder',
             hooks: {
                 async beforeDestroy(folder, options) {
-                    const files = await (folder as any).File;
+                    const files = await (folder as any).Files;
 
                     for (const file of files) {
                         await SequelizeFileModel.destroy({
@@ -69,7 +69,7 @@ export const initSequelizeFolderModel = (sequelize: Sequelize) => {
             
                     options.include.push({
                         model: SequelizeFileModel,
-                        as: "File",
+                        as: "Files",
                         order: [['createdAt', 'DESC']],
                     });
             

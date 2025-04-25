@@ -1,7 +1,6 @@
 export interface CreateFileDTO {
     name: string;
-    type: string;
-    url: string;
+    file: Express.Multer.File
     UserId?: string;
     FolderId?: string;
     private?: boolean;

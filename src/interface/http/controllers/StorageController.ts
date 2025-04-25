@@ -16,9 +16,6 @@ interface IStorageController {
 
 export class StorageController implements IStorageController {
     private logger: Dependencies['logger'];
-    private storageRepository: Dependencies['storageRepository'];
-    private folderRepository: Dependencies['folderRepository'];
-    private fileRepository: Dependencies['fileRepository'];
     private createFileUseCase: Dependencies['createFileUseCase'];
     private createFolderUseCase: Dependencies['createFolderUseCase'];
     private deleteFolderUseCase: Dependencies['deleteFolderUseCase'];
@@ -26,11 +23,8 @@ export class StorageController implements IStorageController {
     private findAllFolderUseCase: Dependencies['findAllFolderUseCase'];
     private findAllFileUseCase: Dependencies['findAllFileUseCase'];
 
-    constructor({ logger, storageRepository, folderRepository, fileRepository, createFileUseCase, createFolderUseCase, deleteFolderUseCase, deleteFileUseCase, findAllFolderUseCase, findAllFileUseCase }: Pick<Dependencies, 'logger' | 'storageRepository' | 'folderRepository' | 'fileRepository' | 'createFileUseCase' | 'createFolderUseCase' | 'deleteFolderUseCase' | 'deleteFileUseCase' | 'findAllFolderUseCase' | 'findAllFileUseCase'>) {
+    constructor({ logger, createFileUseCase, createFolderUseCase, deleteFolderUseCase, deleteFileUseCase, findAllFolderUseCase, findAllFileUseCase }: Pick<Dependencies, 'logger' | 'createFileUseCase' | 'createFolderUseCase' | 'deleteFolderUseCase' | 'deleteFileUseCase' | 'findAllFolderUseCase' | 'findAllFileUseCase'>) {
         this.logger = logger;
-        this.storageRepository = storageRepository;
-        this.folderRepository = folderRepository;
-        this.fileRepository = fileRepository;
         this.createFileUseCase = createFileUseCase;
         this.createFolderUseCase = createFolderUseCase;
         this.deleteFolderUseCase = deleteFolderUseCase;
@@ -50,29 +44,11 @@ export class StorageController implements IStorageController {
                 return res.status(400).json({ error: "Invalid Body" });
             }
 
-            const folderExists = await this.folderRepository.findOne(folderId);
-
-            if (!folderExists) {
-                this.logger.error(`[REQUEST ERROR] - Folder doesn't exists`);
-                return res.status(400).json({ error: "Folder doesn't exists" });
-            }
-
-            const type = file.mimetype;
-            const content = file.buffer;
-
-            const fileUrl = await this.storageRepository.uploadFile(file.originalname, content, `${folderExists.name}/`);
-
-            if (!fileUrl) {
-                this.logger.error(`[MINIO] - Failed to upload`);
-                return res.status(500).json({ error: "[MINIO] - Failed to upload" });
-            }
-
             const uploaded = await this.createFileUseCase.execute({
                 name: file.originalname,
-                url: fileUrl,
+                file,
                 UserId: req.userId,
-                FolderId: folderId,
-                type
+                FolderId: folderId
             });
 
             return res.status(200).json(uploaded);
@@ -98,14 +74,11 @@ export class StorageController implements IStorageController {
         const callName = `${this.constructor.name}.createFolder()`;
         try {
             const { folderName, type } = req.body;
-            const validFolderName = `${folderName}/`;
 
             if (!folderName) {
                 this.logger.error('Folder must have a name');
                 return res.status(400).json({ message: "Folder must have a name" });
             }
-
-            this.storageRepository.createFolder(validFolderName);
 
             const folder = await this.createFolderUseCase.execute({
                 hex: randomColor(),
@@ -138,17 +111,7 @@ export class StorageController implements IStorageController {
         try {
             const { id, folderId } = req.params;
 
-            const file = await this.fileRepository.findOne(id);
-            const folder = await this.folderRepository.findOne(folderId);
-
-            if (!file || !folder) {
-                this.logger.error(`[REQUEST ERROR] - File or Folder not found`);
-                throw new AppError('File or Folder not found', 404);
-            }
-
             await this.deleteFileUseCase.execute(id, folderId);
-
-            await this.storageRepository.deleteFile(file.name, `${folder.name}/`);
 
             return res.status(200).json({ success: true });
         } catch (err: unknown) {
@@ -174,16 +137,7 @@ export class StorageController implements IStorageController {
         try {
             const { id } = req.params;
 
-            const folder = await this.folderRepository.findOne(id);
-
-            if (!folder) {
-                this.logger.error(`[REQUEST ERROR] - Folder not found`);
-                throw new AppError('Folder not found', 404);
-            }
-
             await this.deleteFolderUseCase.execute(id);
-
-            await this.storageRepository.deleteFolder(`${folder.name}/`);
 
             return res.status(200).json({ success: true });
         } catch (err: unknown) {
@@ -200,7 +154,7 @@ export class StorageController implements IStorageController {
 
             return res
                 .status(500)
-                .json({ stack: `[REQUEST ERROR] - Bad Request` });
+                .json({ stack: `[REQUEST ERROR] - Bad Request = ${err}` });
         }
     };
 

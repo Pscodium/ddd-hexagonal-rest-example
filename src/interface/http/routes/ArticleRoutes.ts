@@ -45,17 +45,14 @@ export class ArticleRoutes {
         );
         this.router.get(
             '/articles',
-            this.authenticationMiddleware.validate,
             this.articleController.getArticles,
         );
         this.router.get(
             '/tags',
-            this.authenticationMiddleware.validate,
             this.articleController.getTags,
         );
         this.router.get(
             '/articles/tag/:id',
-            this.authenticationMiddleware.validate,
             this.articleController.getArticlesByTagId,
         );
         this.router.put(

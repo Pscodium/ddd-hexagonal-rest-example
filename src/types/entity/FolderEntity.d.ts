@@ -10,5 +10,5 @@ export interface IFolderEntity {
     createdAt?: Date | number;
     updatedAt?: Date | number;
     filesCount?: number;
-    File?: File[];
+    Files?: File[];
 }
