@@ -12,7 +12,20 @@ export class LoginUserUseCase {
     private sessionRepository: Dependencies['sessionRepository'];
     private environment: Dependencies['environment'];
     private logger: Dependencies['logger'];
-    constructor({ userRepository, passwordValidator, sessionRepository, environment, logger }: Pick<Dependencies, 'userRepository' | 'passwordValidator' | 'sessionRepository' | 'environment' | 'logger'>) {
+    constructor({
+        userRepository,
+        passwordValidator,
+        sessionRepository,
+        environment,
+        logger,
+    }: Pick<
+        Dependencies,
+        | 'userRepository'
+        | 'passwordValidator'
+        | 'sessionRepository'
+        | 'environment'
+        | 'logger'
+    >) {
         this.userRepository = userRepository;
         this.passwordValidator = passwordValidator;
         this.sessionRepository = sessionRepository;
@@ -21,44 +34,56 @@ export class LoginUserUseCase {
     }
 
     async execute(data: LoginUserDTO, res: Response): Promise<User | null> {
-        const userExists = await this.userRepository.findByEmailOrNickname(data.login);
-        
+        const userExists = await this.userRepository.findByEmailOrNickname(
+            data.login,
+        );
+
         if (!userExists || !userExists.password) {
             throw new AppError('User not exists.', 404);
         }
-        
-        const passwordValidate = await this.passwordValidator.passwordComparator(data.password, userExists.password);
-        
+
+        const passwordValidate =
+            await this.passwordValidator.passwordComparator(
+                data.password,
+                userExists.password,
+            );
+
         if (!passwordValidate) {
             throw new AppError('Invalid password.', 404);
         }
-        
+
         const user = await this.userRepository.findById(userExists.id);
-        
+
         if (!user) {
             this.logger.error('Login error, user undefined');
             throw new AppError('Something wrong with login.', 404);
         }
-        
-        const sessionExists = await this.sessionRepository.findOneByUserId(user?.id, data.origin);
+
+        const sessionExists = await this.sessionRepository.findOneByUserId(
+            user?.id,
+            data.origin,
+        );
 
         if (sessionExists) {
             await this.sessionRepository.destroy(sessionExists.sessionId);
         }
 
         const newSession = await this.sessionRepository.create({
-            expirationDate: moment().subtract(3, 'hour').add(3, 'day').valueOf(),
+            expirationDate: moment()
+                .subtract(3, 'hour')
+                .add(3, 'day')
+                .valueOf(),
             jwt: null,
             userId: user?.id,
-            origin: data.origin
+            origin: data.origin,
         });
-    
+
         const serialized = serialize('token', String(newSession.sessionId), {
             expires: new Date(newSession.expirationDate),
             domain: this.environment.frontend_domain,
             secure: true,
             sameSite: 'none',
-            path: '/'
+            path: '/',
         });
         res.set('Set-Cookie', serialized);
 

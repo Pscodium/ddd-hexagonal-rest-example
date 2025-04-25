@@ -11,9 +11,9 @@ export class Folder implements IFolderEntity {
     createdAt!: Date | number | undefined;
     updatedAt!: Date | number | undefined;
     filesCount!: number | undefined;
-    File!: File[] | undefined;
+    Files!: File[] | undefined;
 
-    constructor({ id, name, type, UserId, hex, private: isPrivate, filesCount, File, createdAt, updatedAt }: IFolderEntity) {
+    constructor({ id, name, type, UserId, hex, private: isPrivate, filesCount, Files, createdAt, updatedAt }: IFolderEntity) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -23,7 +23,7 @@ export class Folder implements IFolderEntity {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.filesCount = filesCount;
-        this.File = File;
+        this.Files = Files;
     }
   
 }

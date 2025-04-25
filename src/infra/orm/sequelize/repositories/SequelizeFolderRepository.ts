@@ -62,7 +62,7 @@ export class SequelizeFolderRepository implements IFolderRepository {
                         )
                     ), JSON_ARRAY()
                 )
-            END AS File
+            END AS Files
         FROM folder f
         INNER JOIN users u ON f.UserId = u.id
         LEFT JOIN file fi on fi.FolderId = f.id
