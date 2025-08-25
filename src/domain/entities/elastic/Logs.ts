@@ -1,4 +1,4 @@
-import { ILogEntity } from "@/types/entity/LogsEntity";
+import { ILogEntity } from "@/types/LogsEntity";
 import { SortResults } from "@elastic/elasticsearch/lib/api/types";
 
 export class Logs implements ILogEntity {

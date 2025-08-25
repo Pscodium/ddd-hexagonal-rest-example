@@ -6,19 +6,26 @@ import { SequelizePermissionModel } from '../models/SequelizePermissionModel';
 
 export class SequelizeUserRepository implements IUserRepository {
     async save(user: User): Promise<User> {
-        const permissions = await SequelizePermissionModel.create();
-        const createdUser = await SequelizeUserModel.create({ 
-            firstName: user.firstName, 
-            lastName: user.lastName, 
-            nickname: user.nickname, 
-            email: user.email, 
-            password: user.password,
-            permissionId: permissions.id
-        });
-        permissions.userId = createdUser.id;
-        await permissions.save();
+        try {
+            const permissions = await SequelizePermissionModel.create();
+            const createdUser = await SequelizeUserModel.create({ 
+                firstName: user.firstName, 
+                lastName: user.lastName, 
+                nickname: user.nickname, 
+                email: user.email, 
+                password: user.password,
+                permissionId: permissions.id
+            });
+            permissions.userId = createdUser.id;
+            await permissions.save();
+            const userReturn = await this.findById(createdUser.id);
+            
+            return userReturn ? new User(userReturn) : new User(createdUser);
+        } catch (err) {
+            console.log('error ', err);
+            return new User({} as User);
+        }
         
-        return new User(createdUser);
     }
 
     async findById(id: string): Promise<User | null> {
@@ -47,7 +54,7 @@ export class SequelizeUserRepository implements IUserRepository {
                 exclude: ['password']
             }
         });
-        return users.map((u) => new User(u));
+        return users ? users.map((u) => new User(u)) : [];
     }
 
     async update(id: string, user: Partial<User>): Promise<[affectedCount: number]> {

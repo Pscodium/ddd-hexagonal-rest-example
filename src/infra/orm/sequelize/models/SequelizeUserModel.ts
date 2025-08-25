@@ -4,7 +4,7 @@
 import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 import { enums } from '@/shared/enums';
 import { EnumsType } from '@/types/Enums';
-import { IPermissionEntity } from '@/types/entity/PermissionEntity';
+import { IPermissionEntity } from '@/types/PermissionEntity';
 
 export class SequelizeUserModel extends Model {
     public id!: string;

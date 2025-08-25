@@ -1,4 +1,4 @@
-import { ISessionEntity } from "@/types/entity/SessionEntity";
+import { ISessionEntity } from "@/types/SessionEntity";
 
 export class Session implements ISessionEntity {
     expirationDate: number;

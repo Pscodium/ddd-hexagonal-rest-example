@@ -1,6 +1,6 @@
 import { EnumsType } from "@/types/Enums";
-import { IPermissionEntity } from "@/types/entity/PermissionEntity";
-import { IUserEntity } from "@/types/entity/UserEntity";
+import { IPermissionEntity } from "@/types/PermissionEntity";
+import { IUserEntity } from "@/types/UserEntity";
 
 export class User implements IUserEntity {
     firstName: string;

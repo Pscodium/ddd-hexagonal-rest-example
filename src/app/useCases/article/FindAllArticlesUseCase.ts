@@ -9,9 +9,9 @@ export class FindAllArticlesUseCase {
         this.logger = logger;
     }
 
-    async execute(): Promise<Article[] | null> {
+    async execute(): Promise<Article[] | []> {
         const article = await this.articleRepository.findAll();
 
-        return article ? article.map((a: Article) => new Article(a)) : null;
+        return article ? article.map((a: Article) => new Article(a)) : [];
     }
 }

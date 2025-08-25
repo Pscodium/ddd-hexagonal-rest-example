@@ -121,7 +121,7 @@ export class SequelizeTagRepository implements ITagRepository {
 
         const [ results ] = await this.sequelize.query(query);
 
-        return results as Tag[];
+        return results ? results as Tag[] : [];
     }
 
     async findTagsByArticleId(articleId: string): Promise<Tag[] | null> {

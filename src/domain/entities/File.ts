@@ -1,5 +1,5 @@
-import { IFileEntity } from "@/types/entity/FileEntity";
-import { Folder } from "aws-sdk/clients/storagegateway";
+import { IFileEntity } from "@/types/FileEntity";
+import { Folder } from "./Folder";
 
 export class File implements IFileEntity {
     id!: string;

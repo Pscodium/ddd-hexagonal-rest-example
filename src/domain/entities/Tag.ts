@@ -1,5 +1,5 @@
-import { ITagEntity } from "@/types/entity/TagEntity";
-import { IArticleEntity } from "@/types/entity/ArticleEntity";
+import { ITagEntity } from "@/types/TagEntity";
+import { IArticleEntity } from "@/types/ArticleEntity";
 
 export class Tag implements ITagEntity {
     id!: string;

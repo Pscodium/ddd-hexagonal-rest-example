@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { ENUMS } from '@/shared/enums';
-import { IPermissionEntity } from '@/types/entity/PermissionEntity';
+import { IPermissionEntity } from '@/types/PermissionEntity';
 import { DataTypes, Model, ModelAttributes, Optional, Sequelize, UUIDV4 } from 'sequelize';
 
 export class SequelizePermissionModel extends Model<IPermissionEntity> {

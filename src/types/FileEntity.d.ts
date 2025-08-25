@@ -1,3 +1,5 @@
+import { Folder } from "../domain/entities/Folder";
+
 export interface IFileEntity {
     id: string;
     name: string;

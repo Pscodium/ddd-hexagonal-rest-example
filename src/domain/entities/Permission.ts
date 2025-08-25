@@ -1,4 +1,4 @@
-import { IPermissionEntity } from '@/types/entity/PermissionEntity';
+import { IPermissionEntity } from '@/types/PermissionEntity';
 
 export class Permission implements IPermissionEntity {
     id?: string | undefined;

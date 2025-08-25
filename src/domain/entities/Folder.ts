@@ -1,4 +1,4 @@
-import { IFolderEntity } from "@/types/entity/FolderEntity";
+import { IFolderEntity } from "@/types/FolderEntity";
 import { File } from "./File";
 
 export class Folder implements IFolderEntity {

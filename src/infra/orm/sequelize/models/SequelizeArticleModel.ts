@@ -2,9 +2,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { ITagEntity } from '@/types/entity/TagEntity';
 import { DataTypes, Model, Sequelize, UUIDV4 } from 'sequelize';
 import { SequelizeTagModel } from './SequelizeTagModel';
+import { ITagEntity } from '@/types/TagEntity';
 
 export class SequelizeArticleModel extends Model {
     public id!: string;

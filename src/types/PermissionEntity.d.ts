@@ -1,4 +1,4 @@
-import { PermissionsValuesType } from "../Enums";
+import { PermissionsValuesType } from "@/types/Enums";
 
 export type IPermissionEntity = {
     id?: string;

@@ -1,7 +1,7 @@
 import { AppError } from '@/shared/errors/AppError';
 import Dependencies from '@/types/Dependencies';
-import { IPermissionEntity } from '@/types/entity/PermissionEntity';
-import { IUserEntity } from '@/types/entity/UserEntity';
+import { IPermissionEntity } from '@/types/PermissionEntity';
+import { IUserEntity } from '@/types/UserEntity';
 import { Request, Response } from 'express';
 
 interface IUserController {
@@ -176,6 +176,7 @@ export class UserController implements IUserController {
                 this.logger.error(
                     `[AUTHORIZATION REQUEST ERROR] - ${err.message}`,
                 );
+
                 return res.status(err.status).json({ message: err.stack });
             }
 

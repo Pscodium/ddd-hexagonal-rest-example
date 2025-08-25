@@ -2,17 +2,18 @@ import { Session } from "@/domain/entities/Session";
 import { ISessionRepository } from "@/domain/repositories/ISessionRepository";
 import { SequelizeSessionModel } from "../models/SequelizeSessionModel";
 import { AppError } from "@/shared/errors/AppError";
+import { Op } from 'sequelize';
 
 export class SequelizeSessionRepository implements ISessionRepository {
     async findOne(token: string): Promise<Session | null> {
         try {
             const session = await SequelizeSessionModel.findOne({
                 where: {
-                    expiration_date: SequelizeSessionModel.sequelize?.literal('expiration_date > NOW()'),
+                    expirationDate: { [Op.gt]: new Date() },
                     sessionId: token
                 }
             });
-    
+
             return session ? new Session(session) : null;
         } catch (err) {
             throw new AppError(`Unexpected error on get session by token - stack: ${err}`, 500);

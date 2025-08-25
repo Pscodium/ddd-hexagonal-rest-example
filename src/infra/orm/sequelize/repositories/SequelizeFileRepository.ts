@@ -57,7 +57,7 @@ export class SequelizeFileRepository implements IFileRepository {
         const files = await SequelizeFileModel.findAll({
             order: [['createdAt', 'DESC']]
         });
-        return files.map((f: any) => new File(f));
+        return files ? files.map((f: any) => new File(f)) : [];
     }
 
     async hasFileOnFolder(folderId: string, fileId: string): Promise<boolean> {

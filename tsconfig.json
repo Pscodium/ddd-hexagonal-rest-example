@@ -11,11 +11,11 @@
     "emitDecoratorMetadata": true,
     "baseUrl": "./src",
     "outDir": "./dist",
-    "typeRoots": ["src/types", "./node_modules/@types"], 
+    "typeRoots": ["src/types", "./node_modules/@types", "src/shared/types"], 
     "paths": {
       "@/*": ["*"]
     },
   },
-  "include": ["src", "src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts", "dist"]
+  "include": ["tests", "tests/**/*", "jest.config.js", "src/types"],
+  "exclude": ["node_modules", "dist", "tests/__mocks__"]
 }

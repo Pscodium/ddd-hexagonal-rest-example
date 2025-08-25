@@ -6,12 +6,10 @@ import Dependencies from '@/types/Dependencies';
 import { Article } from '@/domain/entities/Article';
 
 export class SequelizeArticleRepository implements IArticleRepository {
-    private sequelize: Dependencies['sequelize'];
     private sequelizeAdapter: Dependencies['sequelizeAdapter'];
 
     constructor({ sequelizeAdapter }: Pick<Dependencies, 'sequelizeAdapter'>) {
         this.sequelizeAdapter = sequelizeAdapter;
-        this.sequelize = this.sequelizeAdapter.getConnection();
     }
 
     async create(data: Partial<Article>): Promise<Article | null> {
@@ -29,16 +27,18 @@ export class SequelizeArticleRepository implements IArticleRepository {
     }
 
     async findById(id: string): Promise<Article | null> {
+        const sequelize = this.sequelizeAdapter.getConnection();
         return await SequelizeArticleModel.findOne({
             where: { id },
             include: {
-                model: this.sequelize.models.SequelizeTagModel,
+                model: sequelize.models.SequelizeTagModel,
                 as: 'Tags',
             },
         });
     }
 
     async findOne(id: string): Promise<Article | null> {
+        const sequelize = this.sequelizeAdapter.getConnection();
         const query = `
             SELECT 
                 a.id,
@@ -82,7 +82,7 @@ export class SequelizeArticleRepository implements IArticleRepository {
             LIMIT 1
         `;
 
-        const [result] = await this.sequelize.query(query, {
+        const [result] = await sequelize.query(query, {
             replacements: {
                 id,
             },
@@ -92,6 +92,7 @@ export class SequelizeArticleRepository implements IArticleRepository {
     }
 
     async findAll(): Promise<Article[] | null> {
+        const sequelize = this.sequelizeAdapter.getConnection();
         const query = `
             SELECT 
                 a.id,
@@ -133,10 +134,9 @@ export class SequelizeArticleRepository implements IArticleRepository {
                 a.updatedAt
             ORDER BY a.createdAt DESC
         `;
+        const [results] = await sequelize.query(query);
 
-        const [results] = await this.sequelize.query(query);
-
-        return results as Article[];
+        return results? results as Article[] : [];
     }
 
     async update(data: Partial<Article>): Promise<Article | null> {
@@ -157,7 +157,8 @@ export class SequelizeArticleRepository implements IArticleRepository {
     }
 
     async delete(id: string): Promise<boolean | null> {
-        const article = await SequelizeArticleModel.findByPk(id, { include: [{ model: this.sequelize.models.SequelizeTagModel, as: 'Tags' }]});
+        const sequelize = this.sequelizeAdapter.getConnection();
+        const article = await SequelizeArticleModel.findByPk(id, { include: [{ model: sequelize.models.SequelizeTagModel, as: 'Tags' }]});
 
         if (!article) {
             return false;
@@ -174,6 +175,7 @@ export class SequelizeArticleRepository implements IArticleRepository {
     }
 
     async getArticlesByTagId(tagId: string): Promise<Article[] | null> {
+        const sequelize = this.sequelizeAdapter.getConnection();
         const query = `
             SELECT 
                 a.id,
@@ -221,7 +223,7 @@ export class SequelizeArticleRepository implements IArticleRepository {
             ORDER BY a.createdAt DESC;
         `;
 
-        const [results] = await this.sequelize.query(query, {
+        const [results] = await sequelize.query(query, {
             replacements: {
                 tagId,
             },

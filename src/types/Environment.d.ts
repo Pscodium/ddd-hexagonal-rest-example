@@ -1,6 +1,7 @@
 import { Dialect } from "sequelize";
 
 export interface EnvironmentVariables {
+    environment: Environment | string;
     port: number | string;
     database: DatabaseConnectionProps;
     integration: IntegrationProps;
@@ -8,6 +9,8 @@ export interface EnvironmentVariables {
     frontend_domain: string;
     electron_origin: string;
 }
+
+type Environment = 'dev' | 'prod' | 'test';
 
 export interface IntegrationProps {
     elastic: {

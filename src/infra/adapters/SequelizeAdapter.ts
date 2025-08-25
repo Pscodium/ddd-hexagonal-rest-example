@@ -9,20 +9,36 @@ import fs from 'fs';
 export class SequelizeAdapter {
     private sequelize: Sequelize;
     private models: { [key: string]: any };
+    private isTest: boolean;
 
     constructor() {
-        this.sequelize = new Sequelize(
-            environment.database.db_name,
-            environment.database.username,
-            environment.database.password,
-            {
-                host: environment.database.host,
-                dialect: environment.database.dialect,
-                logging: false
-            }
-        );
+        this.isTest = process.env.NODE_ENV === 'test';
+        this.sequelize = {} as Sequelize;
         this.models = {};
+        if (!this.isTest) {
+            this.sequelize = new Sequelize(
+                environment.database.db_name,
+                environment.database.username,
+                environment.database.password,
+                {
+                    host: environment.database.host,
+                    dialect: environment.database.dialect,
+                    logging: false
+                }
+            );
+            this.loadModels();
+        }
+    }
+
+    public async createTestInstance(connectionString: string): Promise<Sequelize> {
+        this.sequelize = new Sequelize(connectionString, { logging: false, dialect: 'mysql' });
         this.loadModels();
+
+        return this.sequelize;
+    }
+
+    public setConnection(sequelize: Sequelize) {
+        this.sequelize = sequelize;
     }
 
     public getConnection(): Sequelize {
@@ -53,8 +69,16 @@ export class SequelizeAdapter {
             }
         });
 
-        await this.sequelize.sync({ alter: true, logging: false });
-        console.log('All tables has been syncronized');
+        if (!this.isTest) {
+            await this.sequelize.sync({ alter: true, logging: false });
+            
+            console.log('All tables have been synchronized');
+        }
+    }
+
+    public async cleanDatabase(): Promise<void> {
+        await this.sequelize.drop();
+        await this.sequelize.sync();
     }
 
     public async loadModels(): Promise<void> {
