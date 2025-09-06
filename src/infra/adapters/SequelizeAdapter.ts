@@ -12,7 +12,7 @@ export class SequelizeAdapter {
     private isTest: boolean;
 
     constructor() {
-        this.isTest = process.env.NODE_ENV === 'test';
+        this.isTest = process.env.NODE_ENV === 'test'; // testar o uso do this.environment como injeção
         this.sequelize = {} as Sequelize;
         this.models = {};
         if (!this.isTest) {

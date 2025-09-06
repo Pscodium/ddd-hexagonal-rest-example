@@ -99,7 +99,7 @@ describe('HTTP Services', () => {
 
     it('should return check auth with success', async () => {
         const authorizationRequestService: Dependencies['authorizationRequestService'] = container.resolve("authorizationRequestService");
-        req.user = { id: 'valid-user-id' }; // Simulate a valid user in the request
+        req.user = { id: 'valid-user-id' };
         const user = await authorizationRequestService.checkAuth(req, res);
         expect(user).toBeDefined();
         expect(user.id).toBe('valid-user-id');

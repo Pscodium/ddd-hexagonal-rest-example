@@ -34,7 +34,6 @@ describe("HTTP Controllers", () => {
     it("should resolve the article controller and return error on request", async () => {
         const articleController: Dependencies['articleController'] = container.resolve("articleController");
         const response: any = await articleController.getArticles(req, res);
-        console.log('response ', response);
         expect(articleController).toBeDefined();
         expect(response.statusCode).toBe(200);
         expect([]).toEqual(response.data);

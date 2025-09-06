@@ -29,6 +29,10 @@ import { ITagRepository } from '@/domain/repositories/ITagRepository';
 import { Permission } from '@/domain/entities/Permission';
 import { Session } from '@/domain/entities/Session';
 import { User } from '@/domain/entities/User';
+import { File } from '@/domain/entities/File';
+import { Folder } from '@/domain/entities/Folder';
+import { Article } from '@/domain/entities/Article';
+import { Tag } from '@/domain/entities/Tag';
 
 // app
 import { GetLogsUseCase } from '@/app/useCases/log/GetLogsUseCase';
@@ -115,6 +119,10 @@ export default interface Dependencies {
         user: User;
         session: Session;
         permission: Permission;
+        file: File;
+        folder: Folder;
+        article: Article;
+        tag: Tag;   
         /* Repository */
         userRepository: IUserRepository;
         permissionRepository: IPermissionRepository;

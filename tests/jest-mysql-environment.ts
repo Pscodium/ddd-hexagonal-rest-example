@@ -6,10 +6,10 @@ global.File = function () {} as any;
 
 import NodeEnvironment from 'jest-environment-node';
 import type { JestEnvironmentConfig, EnvironmentContext } from '@jest/environment';
-import { MySqlContainer, StartedMySqlContainer } from '@testcontainers/mysql';
+import fs from 'fs';
+import path from 'path';
 
 export default class MySqlJestEnvironment extends NodeEnvironment {
-    private container?: StartedMySqlContainer;
 
     constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
         super(config, context);
@@ -17,43 +17,21 @@ export default class MySqlJestEnvironment extends NodeEnvironment {
 
     async setup(): Promise<void> {
         await super.setup();
-
-        // sobe container MySQL
-        this.container = await new MySqlContainer('mysql:8.0')
-            .withDatabase('testdb')
-            .withUsername('testuser')
-            .withUserPassword('testpass')
-            .withRootPassword('testpassroot')
-            .withCommand([
-                "--character-set-server=utf8mb4",
-                "--collation-server=utf8mb4_unicode_ci",
-            ])
-            .start();
-
-        const host = this.container.getHost();
-        const port = this.container.getPort();
-        const db   = this.container.getDatabase();
-        const user = this.container.getUsername();
-        const pass = this.container.getUserPassword();
-        const connectionString = `mysql://${user}:${pass}@${host}:${port}/${db}`;
-
-        this.global.process.env.TEST_DB_HOST = host;
-        this.global.process.env.TEST_DB_PORT = String(port);
-        this.global.process.env.TEST_DB_NAME = db;
-        this.global.process.env.TEST_DB_USER = user;
-        this.global.process.env.TEST_DB_PASS = pass;
-        this.global.process.env.TEST_DB_URL = connectionString;
-
-        // guarda referência para teardown
-        (this.global as any).__MYSQL_CONTAINER__ = this.container;
+        const TEMP_FILE = path.resolve(__dirname, 'mysql-testcontainer-info.json');
+        if (fs.existsSync(TEMP_FILE)) {
+            const info = JSON.parse(fs.readFileSync(TEMP_FILE, 'utf8'));
+            this.global.process.env.TEST_DB_HOST = info.host;
+            this.global.process.env.TEST_DB_PORT = String(info.port);
+            this.global.process.env.TEST_DB_NAME = info.db;
+            this.global.process.env.TEST_DB_USER = info.user;
+            this.global.process.env.TEST_DB_PASS = info.pass;
+            this.global.process.env.TEST_DB_URL = info.connectionString;
+        } else {
+            throw new Error('MySQL testcontainer info file not found. Did you forget to run globalSetup?');
+        }
     }
 
     async teardown(): Promise<void> {
-        const ctn: StartedMySqlContainer | undefined = (this.global as any).__MYSQL_CONTAINER__;
-        if (ctn) {
-            await ctn.stop();
-            (this.global as any).__MYSQL_CONTAINER__ = undefined;
-        }
         await super.teardown();
     }
 }
